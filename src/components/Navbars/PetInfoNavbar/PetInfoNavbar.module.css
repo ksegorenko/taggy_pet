@@ -1,0 +1,26 @@
+.pet_info_label {
+    font-weight: 500;
+    font-size: 20px;
+    opacity: 40%;
+    margin-top: 15px;
+    margin-left: 8px;
+}
+
+@media screen and (max-width: 1199px) {
+    .personal_cabinet_col {
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 767.5px) {
+    .personal_cabinet_col {
+        padding-left: 0;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .personal_cabinet_col {
+        display: none;
+    }
+}

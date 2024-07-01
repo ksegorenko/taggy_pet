@@ -1,0 +1,55 @@
+.wrapper {
+    margin-bottom: 10%;
+    max-width: none;
+    width: 300px;
+    height: 200px;
+    border-radius: 20px;
+}
+
+.pet_card {
+    position: relative;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: cover !important;
+}
+
+.pet_card:hover {
+    background: linear-gradient(to top, rgb(255 88 0), rgba(255, 116, 43, 0.8)) !important;
+    background-size: cover !important;
+}
+
+.pet_name {
+    position: absolute;
+    bottom: 0;
+    margin-left: 5%;
+    color: white;
+}
+
+.pet_name h5 {
+    font-weight: bold;
+    font-size: 27px;
+}
+
+@media screen and (max-width: 767.5px) {
+    .md {
+        padding-left: 0px;
+    }
+
+    .pet_card {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 575.5px) {
+    .col11 {
+        margin-left: auto;
+        margin-right: auto;
+        padding-right: 0;
+    }
+
+    .pet_card {
+        margin-right: auto;
+        margin-left: auto;
+        width: 90%;
+    }
+}

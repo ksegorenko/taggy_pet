@@ -1,0 +1,26 @@
+.input {
+    background-color: #eaeaeab3;
+    width: 100%;
+    padding: 10px 15px;
+    border-style: solid;
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    border-width: 3px;
+    border-color: #c5c5c5;
+    border-radius: 20px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.social_network {
+    margin-top: 20px;
+}
+
+.social_networks_container .input {
+    width: 79%;
+}
+
+.button {
+    margin-top: 15px;
+}

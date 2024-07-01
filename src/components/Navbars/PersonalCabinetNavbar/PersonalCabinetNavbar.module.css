@@ -1,0 +1,239 @@
+.personal_cabinet_label {
+    font-weight: 500;
+    font-size: 20px;
+    opacity: 40%;
+    margin-top: 15px;
+    margin-left: 8px;
+}
+
+.menu {
+    display: none;
+}
+
+.menu label {
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.logout_btn {
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 5px 25px;
+    font-size: 17px;
+    border-style: solid;
+    outline: none;
+    background-color: white;
+    color: #462446;
+    border-color: #462446;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.logout_btn:hover {
+    background-color: #462446;
+    color: white;
+}
+
+.burger, .burger_icon {
+    display: none;
+}
+
+
+.delete_col {
+    margin-left: 60px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.delete_link {
+    text-decoration: none;
+}
+
+.delete_link:hover {
+    text-decoration: none;
+}
+
+.delete_label {
+    margin-bottom: 0px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #462446;
+    opacity: 50%;
+}
+
+.delete_label:hover {
+    opacity: 100%;
+    color: #462446;
+}
+
+
+
+.pop_up {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+}
+
+.pop_up.active {
+    display: block;
+}
+
+.pop_up_container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.pop_up_body {
+    margin: auto;
+    width: 500px;
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+    padding: 50px 35px 50px 35px;
+    position: relative;
+}
+
+.pop_up_body h2 {
+    font-weight: bold;
+    font-size: 1.7em;
+}
+
+.pop_up_body p {
+    font-size: 1.15em;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 2em;
+}
+
+.buttons_container {
+    display: inline-flex;
+}
+
+.delete_btn {
+    width: fit-content;
+    border: 3px solid #f81d1d;
+    font-weight: 600;
+    border-radius: 10px;
+    font-size: 15px;
+    background-color: #ffffff;
+    color: #f81d1d;
+    padding: 12px 35px;
+}
+
+.delete_btn:hover {
+    color: white;
+    background-color: #f81d1d;
+    box-shadow: 1px 1px 15px 6px rgb(248, 29, 29);
+}
+
+.pop_up_close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close_button {
+    border: none;
+    padding: 12px 35px;
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-left: 20px;
+    background: #464646;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.close_button:hover {
+    box-shadow: 1px 1px 15px 6px rgb(70, 70, 70);
+}
+
+@media screen and (max-width: 1199px) {
+    .personal_cabinet_col {
+        margin-left: 10px;
+    }
+
+    .logout_col {
+        padding-left: 50px;
+    }
+
+    .delete_col {
+        margin-left: 120px;
+    }
+}
+
+@media screen and (max-width: 991.5px) {
+    .menu, .burger_icon {
+        display: block;
+    }
+
+    .burger_icon::before {
+        content: '☰';
+        font-size: 27px;
+    }
+
+    nav {
+        z-index: 1;
+        display: none;
+        right: 0;
+        position: absolute;
+        width: 200px;
+        background-color: white;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+        border-radius: 20px;
+        padding: 10px 15px;
+    }
+
+    .display_none_md {
+        display: none;
+    }
+
+    .burger:checked + label + nav {
+        display: block;
+    }
+
+    .burger:checked + .burger_icon::before {
+        content: '⮾';
+        color: #ff742b;
+    }
+
+    .menu li {
+        display: block;
+        margin-right: 0px;
+        padding: 0px;
+    }
+
+    .menu a {
+        font-weight: 600;
+        font-size: 18px;
+        color: #462446;
+    }
+
+    .logout_btn {
+        margin-bottom: 8px;
+        display: initial;
+        padding: 3px 15px;
+    }
+}
+
+@media screen and (max-width: 767.5px) {
+    .personal_cabinet_col {
+        padding-left: 0;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .personal_cabinet_col {
+        display: none;
+    }
+}

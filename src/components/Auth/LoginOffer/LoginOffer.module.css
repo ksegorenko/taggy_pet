@@ -1,0 +1,58 @@
+.h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: black;
+}
+
+.title {
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
+.offer {
+    justify-content: center;
+    display: contents;
+    width: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    height: 100%;
+    align-content: center;
+    align-items: center;
+}
+
+.authorization_window {
+    width: 100%;
+    border-radius: 43px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.elem_in_window {
+    margin: auto;
+}
+
+.title {
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
+.registration_link {
+    font-size: 17px;
+    font-weight: bold;
+    color: black;
+    background-color: #D9D9D9;
+    border-radius: 64px;
+    padding: 10px 35px;
+    text-decoration: none;
+}
+
+.registration_link:hover {
+    text-decoration: none;
+    color: black;
+    background-color: #D9D9D9;
+    box-shadow: 1px 1px 30px 6px rgba(217, 217, 217, 80);
+}
