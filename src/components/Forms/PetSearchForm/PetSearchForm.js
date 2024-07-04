@@ -25,7 +25,7 @@ const PetSearchForm = () => {
                     <input className={styles.input}
                            type="text"
                            value={searchParameter}
-                           placeholder="Введите номер чипа"
+                           placeholder="Введите номер чипа или клеймо"
                            pattern="^\d{15}"
                            maxLength="15"
                            required
