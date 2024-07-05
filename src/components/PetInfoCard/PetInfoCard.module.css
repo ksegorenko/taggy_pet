@@ -88,11 +88,15 @@ td {
 }
 
 
-@media screen and (max-width: 767.5px) {
+@media screen and (max-width: 769px) {
+    table.pet {
+        font-size: 16px;
+    }
+
     .wrapper {
-        width: 210px;
+        width: 180px;
         height: 140px;
-        margin-right: 1.5em;
+        margin-right: 0em;
     }
 
     .pet_data_window h1 {

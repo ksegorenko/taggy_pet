@@ -12,14 +12,7 @@
     }
 }
 
-@media screen and (max-width: 767.5px) {
-    .personal_cabinet_col {
-        padding-left: 0;
-        margin-left: 0;
-    }
-}
-
-@media screen and (max-width: 520px) {
+@media screen and (max-width: 768px) {
     .personal_cabinet_col {
         display: none;
     }

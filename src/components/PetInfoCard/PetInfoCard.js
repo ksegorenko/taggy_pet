@@ -50,7 +50,6 @@ const PetInfoCard = ({data}) => {
                                             <tr>
                                                 <td className={styles.title_table}>Чип</td>
                                                 <td className={styles.data_table}>{data.chip_id}</td>
-                                            {/*TODO: отобразить stampId питомца (при наличии) */}
                                             </tr>
                                         )}
 
@@ -58,7 +57,6 @@ const PetInfoCard = ({data}) => {
                                             <tr>
                                                 <td className={styles.title_table}>Клеймо</td>
                                                 <td className={styles.data_table}>{data.stamp_id}</td>
-                                                {/*TODO: отобразить stampId питомца (при наличии) */}
                                             </tr>
                                         )}
                                     </table>

@@ -21,6 +21,27 @@ const pet = {
                 property_id: 0,
                 property_value: "Аллергия"
             }
+        },
+        {
+            description: "Не переносит хозяина",
+            property_type: {
+                property_id: 1,
+                property_value: "Другое"
+            }
+        },
+        {
+            description: "Очень любит огурцы",
+            property_type: {
+                property_id: 2,
+                property_value: "Питание"
+            }
+        },
+        {
+            description: "Любит когда чешут за ушком",
+            property_type: {
+                property_id: 1,
+                property_value: "Другое"
+            }
         }
     ],
     users: [

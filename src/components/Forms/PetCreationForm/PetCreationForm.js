@@ -41,6 +41,13 @@ const PetCreationForm = () => {
                 /><br/><br/>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
+                       placeholder="Клеймо"
+                       required
+                       name="stampId"
+                       onChange={update}
+                /><br/><br/>
+                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                       type="text"
                        placeholder="Вид животного"
                        required
                        name="type"

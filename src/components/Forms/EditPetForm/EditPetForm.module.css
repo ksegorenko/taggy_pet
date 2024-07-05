@@ -63,3 +63,29 @@
 .form input {
     width:300px;
 }
+
+.delete_button {
+    width: 300px;
+    display: block;
+    font-weight: bold;
+    border-radius: 64px;
+    padding: 10px 35px;
+    font-size: 17px;
+    border: 2px solid #ff322bf1;
+    background-color: white;
+    color: #ff322bf1;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    outline: none;
+    margin-top: 20px;
+}
+
+.delete_button:hover {
+    background-color: #ff322bf1;
+    color: white;
+}
+
+.delete_button:active {
+    background-color: #ff322bf1;
+    color: white;
+}
