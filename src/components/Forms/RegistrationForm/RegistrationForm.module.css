@@ -82,3 +82,30 @@ label {
 .social_network_logo {
     margin-right: 10px;
 }
+
+.delete_button {
+    display: none;
+    width: 300px;
+    display: block;
+    font-weight: bold;
+    border-radius: 64px;
+    padding: 10px 35px;
+    font-size: 17px;
+    border: 2px solid #f20808;
+    background-color: white;
+    color: #f20808;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    outline: none;
+    margin-top: 20px;
+}
+
+.delete_button:hover {
+    background-color: #f20808;
+    color: white;
+}
+
+.delete_button:active {
+    background-color: #f20808;
+    color: white;
+}

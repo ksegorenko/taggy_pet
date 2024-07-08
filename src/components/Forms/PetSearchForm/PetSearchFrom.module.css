@@ -39,6 +39,20 @@
     outline: none;
 }
 
+@media screen and (max-width: 990.5px) and (min-width: 769.5px){
+    .input {
+        left: 20px;
+        font-size: 18px;
+        width: 350px;
+    }
+}
+
+@media screen and (min-width: 991.5px) and (max-width: 1198.5px) {
+    .button {
+        margin-top: 20px;
+    }
+}
+
 @media screen and (max-width: 991.5px) {
     .input_container {
         margin-bottom: 22px;
@@ -53,7 +67,8 @@
 
     .input {
         height: 40px;
-        font-size: 15px;
+        width: 260px;
+        font-size: 13px;
         opacity: 80%;
         padding: 15px;
         border-radius: 31px;

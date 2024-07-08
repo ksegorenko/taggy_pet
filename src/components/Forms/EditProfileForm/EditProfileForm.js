@@ -3,6 +3,7 @@ import phoneValidate from "../../../utils/phoneValidate";
 import formstyles from "../LoginForm/LoginForm.module.css";
 import styles from "../RegistrationForm/RegistrationForm.module.css";
 import editstyles from "./EditProfileForm.module.css"
+import Modal from "../../Modal/Modal";
 
 const user = {
     name: "Александр",
@@ -66,6 +67,8 @@ const EditProfileForm = () => {
         }));
     }
 
+    const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
+
     const handleSubmit = e => {
         e.preventDefault();
         console.log(regData);
@@ -78,6 +81,10 @@ const EditProfileForm = () => {
         }
 
     }
+
+    const handleDelete = () => {
+        setModalConfirmOpen(true);
+    };
 
     return (
         <div className={formstyles.form_container}>
@@ -166,7 +173,16 @@ const EditProfileForm = () => {
                         onClick={handleSubmit}>
                     Подтвердить изменения
                 </button>
+                <button className={`${formstyles.button} ${formstyles.elem_in_window} ${styles.delete_button}`}
+                    type="delete_button"
+                    onClick={handleDelete}>
+                    Удалить профиль
+                </button>
             </form>
+            <Modal isOpen={modalConfirmIsOpen} onClose={() => setModalConfirmOpen(false)}>
+                    <h2>Вы уверены?</h2>
+                    <p>Все данные о Вас и Вашем питомце будут удалены и в случае его пропажи люди не смогут связаться с Вами через наш сервис.</p>
+            </Modal>
         </div>
     );
 }

@@ -24,3 +24,29 @@
 .button {
     margin-top: 15px;
 }
+
+.delete_button {
+    width: 300px;
+    display: block;
+    font-weight: bold;
+    border-radius: 64px;
+    padding: 10px 35px;
+    font-size: 17px;
+    border: 2px solid #050101;
+    background-color: white;
+    color: #050101;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    outline: none;
+    margin-top: 20px;
+}
+
+.delete_button:hover {
+    background-color: #050101;
+    color: white;
+}
+
+.delete_button:active {
+    background-color: #050101;
+    color: white;
+}

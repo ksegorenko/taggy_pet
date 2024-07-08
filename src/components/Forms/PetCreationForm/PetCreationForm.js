@@ -35,6 +35,8 @@ const PetCreationForm = () => {
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Чип"
+                       pattern="^\d{15}"
+                       maxLength="15"
                        required
                        name="chipId"
                        onChange={update}
