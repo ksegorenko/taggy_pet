@@ -30,6 +30,17 @@
     font-size: 27px;
 }
 
+@media screen and (min-width: 767.6px) and (max-width: 768.5px) {
+    .wrapper {
+        grid-template-columns: repeat(auto-fit, minmax(50%, 1fr)); 
+        gap: 10px; 
+    }
+
+    .pet_card {
+        width: auto; 
+    }
+}
+
 @media screen and (max-width: 767.5px) {
     .md {
         padding-left: 0px;

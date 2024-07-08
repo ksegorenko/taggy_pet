@@ -109,3 +109,22 @@ label {
     background-color: #f20808;
     color: white;
 }
+
+.input {
+    background-color: white;
+    width: 100%;
+    padding: 10px 15px;
+    border-style: solid;
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    border-width: 3px;
+    border-color: #ff742b;
+    border-radius: 20px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.social_networks_container .input {
+    width: 62%;
+}

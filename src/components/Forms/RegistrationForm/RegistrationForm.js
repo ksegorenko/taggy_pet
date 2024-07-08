@@ -118,9 +118,11 @@ const RegistrationForm = () => {
                             return (
                                 <div className={styles.social_networks_container}>
                                     <img src={`/images/icons/${network}.svg`} alt="Logo" className={styles.social_network_logo}/>
-                                    <input
+                                    <input className={styles.input}
                                         type="text"
-                                        name={network}
+                                        placeholder="Логин"
+                                        name={network.propertyValue}
+                                        value={network.shortName}
                                         onChange={updateNetwork}
                                     />
                                 </div>
