@@ -5,13 +5,13 @@ import {usePetInfo} from "../../hooks/PetHooks";
 import {useParams} from "react-router-dom";
 
 
-const PetInfoCard = ({data}) => {
-    console.log(data)
+const PetInfoCard = ({pet}) => {
+    console.log(pet)
     return (
         <Container>
             <Row>
                 <Col xs={11} sm={12} md={10} lg={8} xl={7} className={styles.pet_data_window + " mx-auto"}>
-                    {data && (
+                    {pet && (
                         <>
                             <div className={styles.title + " " + styles.elem_in_window}>
                                 <h1 className={styles.adaptive_header}>
@@ -25,38 +25,38 @@ const PetInfoCard = ({data}) => {
                                          backgroundRepeat: "no-repeat",
                                          backgroundPosition: "center",
                                          backgroundSize: "cover",
-                                         backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1)), url(/images/pets/" + data.imageUUIDName + ")",
+                                         backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1)), url('http://localhost:8080/api/v1/pet/images/" + pet.pet_image?.image_uuid_name + "')",
                                      }}>
                                     <div className={styles.pet_name}>
-                                        <h4 id="pets-name">{data.name}</h4>
+                                        <h4 id="pets-name">{pet.name}</h4>
                                     </div>
                                 </div>
                                 <div className={styles.pet_data}>
                                     <table className={styles.pet}>
                                         <tr>
                                             <td className={styles.title_table}>Вид</td>
-                                            <td className={styles.data_table}>{data.type}</td>
+                                            <td className={styles.data_table}>{pet.type}</td>
                                         </tr>
                                         <tr>
                                             <td className={styles.title_table}>Порода</td>
-                                            <td className={styles.data_table}>{data.breed}</td>
+                                            <td className={styles.data_table}>{pet.breed}</td>
                                         </tr>
                                         <tr>
                                             <td className={styles.title_table}>Пол</td>
-                                            <td className={styles.data_table}>{data.sex === 'MALE' ? 'Самец' : 'Самка'}</td>
+                                            <td className={styles.data_table}>{pet.sex === 'MALE' ? 'Самец' : 'Самка'}</td>
                                         </tr>
 
-                                        { data.chip_id && (
+                                        { pet.chip_id && (
                                             <tr>
                                                 <td className={styles.title_table}>Чип</td>
-                                                <td className={styles.data_table}>{data.chip_id}</td>
+                                                <td className={styles.data_table}>{pet.chip_id}</td>
                                             </tr>
                                         )}
 
-                                        { data.stamp_id && (
+                                        { pet.stamp_id && (
                                             <tr>
                                                 <td className={styles.title_table}>Клеймо</td>
-                                                <td className={styles.data_table}>{data.stamp_id}</td>
+                                                <td className={styles.data_table}>{pet.stamp_id}</td>
                                             </tr>
                                         )}
                                     </table>

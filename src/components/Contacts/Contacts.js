@@ -22,7 +22,7 @@ const users = [
     }
 ]
 
-const Contacts = () => {
+const Contacts = ({contacts}) => {
     return (
         <Container>
             <Row className={styles.contacts_header}>
@@ -32,7 +32,7 @@ const Contacts = () => {
             </Row>
             <Row className={styles.contacts_cards}>
                 {
-                    users.map((user) => {
+                    contacts?.map((user) => {
                         return <ContactCard user={user}/>
                     })
                 }

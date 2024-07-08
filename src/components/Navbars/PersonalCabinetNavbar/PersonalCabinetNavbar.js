@@ -5,14 +5,14 @@ import styles from "./PersonalCabinetNavbar.module.css";
 import Modal from "../../Modal/Modal";
 import {useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
+import authenticationService from "../../../services/AuthenticationService";
 
 const PersonalCabinetNavbar = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
-    const queryClient = useQueryClient();
     const navigate = useNavigate()
     const handleLogout = (e) => {
         e.preventDefault()
-        queryClient.removeQueries('user');
+        authenticationService.logout()
         navigate(`/`)
     }
 

@@ -15,11 +15,11 @@ function App() {
               <Route path="/" element={<Home/>}></Route>
               <Route path="/registration" element={<Registration/>}></Route>
               <Route path="/login" element={<Login/>}></Route>
-              <Route path="/cabinet" element = {<PersonalCabinet/>}></Route>
+              <Route path="/user" element = {<PersonalCabinet/>}></Route>
               <Route path="/pet/info/:searchParameter" element={<PetInfo/>}></Route>
               <Route path="/user/edit" element={<EditProfile/>}></Route>
-              <Route path="/pet/add-new-pet" element={<PetCreation/>}></Route>
-              <Route path="/pet/edit" element={<EditPet/>}></Route>
+              <Route path="/pet/add" element={<PetCreation/>}></Route>
+              <Route path="/pet/edit/:petId" element={<EditPet/>}></Route>
           </Routes>
       </BrowserRouter>
   );
