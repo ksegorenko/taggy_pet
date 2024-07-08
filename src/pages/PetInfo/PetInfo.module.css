@@ -1,0 +1,21 @@
+.white_background {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+    color: black;
+}
+
+.nav {
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.features {
+    margin-top: 2em;
+}
+
+.contacts {
+    margin-top: 1.6em;
+    margin-bottom: 2em;
+}

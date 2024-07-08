@@ -1,0 +1,13 @@
+@media screen and (max-width: 995px) {
+    .delete_link {
+        display: none;
+    }
+
+    .authorization_window {
+        text-align: center;
+    }
+
+    .authorization_window h1 {
+        font-size: 1.5rem; 
+    }
+}

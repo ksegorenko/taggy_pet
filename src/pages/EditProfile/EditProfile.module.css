@@ -1,0 +1,12 @@
+.gray_background {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    color: black;
+    background-color: #eaeaea;
+}
+
+.header {
+    margin-top: 25px;
+    margin-bottom: 2%;
+}

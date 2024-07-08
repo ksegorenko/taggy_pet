@@ -1,0 +1,96 @@
+.white_background {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    background-color: white;
+    color: black;
+}
+
+.li {
+    display: inline;
+    margin-right: 5px;
+    padding: 3px;
+}
+
+.mobile {
+    display: none;
+}
+
+.nav {
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.pets_list_header {
+    margin-top: 35px;
+    margin-bottom: 30px;
+}
+
+.pets_list_header ul {
+    margin: 0;
+    padding: 4px;
+}
+
+.picture_container {
+    z-index: 1;
+    padding-left: 30px;
+}
+
+.pers_cab_img {
+    height: 350px;
+}
+
+
+.add_label {
+    font-size: 18px;
+}
+
+.list_label {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+.pet_list_btn {
+    font-size: 25px;
+    font-weight: 600;
+    background-color: #FF742B;
+    color: white;
+    border-radius: 15px;
+    padding: 10px 20px;
+    text-decoration: none;
+    align-items: center;
+}
+
+.pet_list_btn:hover {
+    text-decoration: none;
+    color: white;
+    background-color: #FF742B;
+    box-shadow: 1px 1px 30px 6px rgba(255, 116, 43, 100);
+}
+
+@media screen and (max-width: 1199px) {
+    .picture_container {
+        padding-left: 0;
+        margin-left: 100px
+    }
+}
+
+@media screen and (max-width: 991.5px) {
+    .picture_container {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 575.5px) {
+    .display_none_mobile {
+        display: none;
+    }
+
+    .list_label {
+        font-size: 23px;
+    }
+
+    .mobile {
+        display: contents;
+    }
+}

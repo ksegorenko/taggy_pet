@@ -1,0 +1,56 @@
+.registration_link {
+    margin-left: 3em;
+    font-size: 16px;
+    color: white;
+    position: relative;
+    text-decoration: none;
+}
+
+.registration_link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.login_link {
+    font-size: 16px;
+    font-weight: 600;
+    background-color: white;
+    color: #462446;
+    border-radius: 35px;
+    padding: 1em 1.5em;
+    text-decoration: none;
+}
+
+.login_link:hover {
+    text-decoration: none;
+    color: #462446;
+    background-color: white;
+    box-shadow: 1px 1px 15px 1px rgba(255, 255, 255, 100);
+}
+
+.personal_cabinet__link {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    position: relative;
+}
+
+.personal_cabinet__link:hover {
+    color: #FF742B;
+}
+
+@media screen and (max-width: 575.5px) {
+    .login_link {
+        padding: 0.7em 1em;
+    }
+
+    .personal_cabinet__icon {
+        opacity: 70%;
+        height: 40px;
+    }
+
+    .container {
+        padding: 0 15px;
+        align-items: center;
+    }
+}

@@ -1,0 +1,161 @@
+.pet_data_window {
+    box-shadow: rgba(0, 0, 0, 0.15) 0 0 40px;
+    border-collapse: separate;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 3% 40px 3%;
+    border-radius: 40px;
+    border-spacing: 13px 6px;
+}
+
+.title {
+    margin-bottom: 2%;
+}
+
+.pet_data_window h1 {
+    text-align: center;
+    font-size: 2.4em;
+    font-weight: bold;
+    color: black;
+}
+
+.narrow_screen_header {
+    display: none;
+}
+
+.elem_in_window {
+    margin: auto;
+}
+
+.data_container {
+    align-items: center;
+    flex-direction: row;
+    display: flex;
+}
+
+.wrapper {
+    margin-right: 2em;
+    max-width: none;
+    width: 249px;
+    height: 166px;
+    border-radius: 20px;
+}
+
+.pet_card {
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.pet_name {
+    position: absolute;
+    bottom: 0;
+    margin-left: 5%;
+    color: white;
+}
+
+.pet_name h4 {
+    color: rgb(255, 116, 43);
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.pet_data {
+    overflow: auto;
+    width: 285px;
+}
+
+table.pet {
+    font-size: 20px;
+    border-collapse: separate;
+    border-spacing: 0.5em 0.1em;
+}
+
+td {
+    vertical-align: top;
+    font-size: 18px;
+}
+
+.title_table {
+    font-weight: 500;
+    opacity: 0.5;
+}
+
+.data_table {
+    font-weight: 600;
+}
+
+
+@media screen and (max-width: 769px) {
+    table.pet {
+        font-size: 16px;
+    }
+
+    .wrapper {
+        width: 180px;
+        height: 140px;
+        margin-right: 0em;
+    }
+
+    .pet_data_window h1 {
+        font-size: 2em;
+    }
+}
+
+@media screen and (max-width: 575.5px) {
+    .pet_data_window {
+        padding: 6% 5%;
+    }
+
+    .pet_data_window h1 {
+        font-size: 1.5em;
+    }
+
+    .title {
+        margin-top: 0;
+    }
+
+    .data_container {
+        flex-direction: column;
+    }
+
+    .wrapper {
+        margin-bottom: 1em;
+        margin-right: 0;
+        width: 249px;
+        height: 166px;
+    }
+}
+
+@media screen and (max-width: 349px) {
+    .title {
+        text-align: center;
+    }
+
+    .elem_in_window {
+        margin: 0;
+    }
+
+    .normal_header {
+        display: none;
+    }
+
+    .pet_data_window h1 {
+        font-size: 1.3em;
+    }
+
+    .narrow_screen_header {
+        display: block;
+    }
+
+    .wrapper {
+        width: 210px;
+        height: 140px;
+    }
+
+    .pet_data {
+        width: 230px;
+    }
+}

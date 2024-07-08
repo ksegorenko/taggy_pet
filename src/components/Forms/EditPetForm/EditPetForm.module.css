@@ -1,0 +1,91 @@
+.radios_container {
+    margin-bottom: 10px;
+    display: ruby;
+}
+
+.radios_container label {
+    cursor: pointer;
+    margin-right: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    align-items: center;
+    color: black;
+    display: flex;
+}
+
+.real_radio {
+    width: 0;
+    height: 0;
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+.custom_radio {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border: 3px solid #c5c5c5;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: text-top;
+}
+
+.custom_radio::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #787878;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 0.2s ease-in;
+}
+
+.real_radio:checked + .custom_radio::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.features h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.form {
+   display: grid;
+}
+
+.form input {
+    width:300px;
+}
+
+.delete_button {
+    width: 300px;
+    display: block;
+    font-weight: bold;
+    border-radius: 64px;
+    padding: 10px 35px;
+    font-size: 17px;
+    border: 2px solid #ff322bf1;
+    background-color: white;
+    color: #ff322bf1;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    outline: none;
+    margin-top: 20px;
+}
+
+.delete_button:hover {
+    background-color: #ff322bf1;
+    color: white;
+}
+
+.delete_button:active {
+    background-color: #ff322bf1;
+    color: white;
+}

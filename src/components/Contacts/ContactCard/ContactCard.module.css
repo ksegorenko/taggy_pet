@@ -1,0 +1,60 @@
+.user_card {
+    box-shadow: rgba(0, 0, 0, 0.15) 0 0 40px;
+    border-collapse: separate;
+    border-radius: 20px;
+    border-spacing: 13px 6px;
+    padding: 1em;
+    margin-bottom: 2%;
+    margin-right: 15px;
+}
+
+table.user {
+    font-size: 18px;
+    border-collapse: separate;
+    border-spacing: 1em 0.1em;
+}
+
+.title_table {
+    font-weight: 500;
+    opacity: 0.5;
+}
+
+.data_table {
+    font-weight: 600;
+}
+
+td {
+    vertical-align: top;
+    font-size: 18px;
+}
+
+.social_networks_container {
+    margin-top: 20px;
+    display: flex;
+    padding-left: 15px;
+}
+
+@media screen and (max-width: 575.5px) {
+    .user_data {
+        overflow: auto;
+        width: 310px;
+    }
+
+    .user_card {
+        margin-right: 0;
+    }
+}
+
+@media screen and (max-width: 349px) {
+    td {
+        font-size: 0.77em
+    }
+
+    .user_data {
+        width: 230px;
+    }
+
+    .user_card {
+        padding: 0.6em;
+    }
+}

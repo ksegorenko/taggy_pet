@@ -1,0 +1,51 @@
+.window {
+    width: 40%;
+    margin-bottom: 5%;
+}
+
+.window h1 {
+    text-align: center;
+}
+
+.offer .row {
+    position: relative;
+    align-items: normal;
+}
+
+.delete_container {
+    position: absolute;
+    left: 63%;
+    transform: translateX(50%);
+}
+
+.delete_container img {
+    height: 48px;
+}
+
+@media screen and (max-width: 991.5px){
+    .window {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 767.5px){
+    .window {
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 575.5px) {
+    .window {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 493px) {
+    .window h1 {
+        font-size: 20px;
+    }
+
+    .window {
+        width: 95%;
+    }
+}

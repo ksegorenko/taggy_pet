@@ -1,0 +1,14 @@
+.orange_background {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    color: black;
+    background-color: #ff742b4f;
+}
+
+.header {
+    margin-top: 25px;
+    margin-bottom: 2%;
+}
+
+

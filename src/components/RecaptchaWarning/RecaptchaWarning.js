@@ -1,0 +1,14 @@
+import styles from "./RecaptchaWarning.module.css"
+
+const RecaptchaWarning = () => {
+    return (
+        <div className={styles.container}>
+            <p>This site is protected by reCAPTCHA and the Google
+                <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+                <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+            </p>
+        </div>
+    );
+}
+
+export default RecaptchaWarning;
