@@ -1,90 +1,85 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import phoneValidate from "../../../utils/phoneValidate";
 import formstyles from "../LoginForm/LoginForm.module.css";
 import styles from "../RegistrationForm/RegistrationForm.module.css";
 import editstyles from "./EditProfileForm.module.css"
-import Modal from "../../Modal/Modal";
+import userService from "../../../services/UserService";
+import {useNavigate} from "react-router-dom";
 
-const user = {
-    name: "Александр",
-    email: "alexander@alexander",
-    phone: "8 (888) 888-8888",
-    emailPermit: true,
-    phonePermit: false,
-    password: "password",
-    networks: [
-        {
-            propertyId: 0,
-            propertyValue: "VK",
-            shortName: "vkalexander"
-        },
-        {
-            propertyId: 1,
-            propertyValue: "TG",
-            shortName: "tgalexander"
-        },
-        {
-            propertyId: 2,
-            propertyValue: "OK",
-            shortName: ""
-        },
-    ]
-}
 
 const EditProfileForm = () => {
-    const [regData, setRegData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        emailPermit: '',
-        phonePermit: '',
-        password: '',
-        logins: { }
-    })
+    const navigate = useNavigate()
 
+    const [user, setUser] = useState()
+    const [name, setName] = useState()
+    const [email, setEmail] = useState()
+    const [phone, setPhone] = useState()
+    const [permitToShowEmail, setPermitToShowEmail] = useState()
+    const [permitToShowPhone, setPermitToShowPhone] = useState()
+    const [newPassword, setNewPassword] = useState()
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [logins, setLogins] = useState('')
+    const [tg, setTG] = useState()
+    const [vk, setVK] = useState()
+    const [ok, setOK] = useState()
 
-    const update = e => {
-        const target = e.currentTarget;
-        let value = (target.type === 'checkbox' ? target.checked : target.value);
-
-        if (target.name === 'phone') {
-            value = phoneValidate(e);
-        }
-
-        setRegData({
-            ...regData,
-            [target.name]: value
-        });
-    }
-
-    const updateNetwork = e => {
-        const target = e.target;
-        setLogins(prevLogins => ({
-            ...prevLogins,
-            [target.name]: target.value
-        }));
-    }
-
-    const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
+    useEffect(() => {
+        userService.getUserEditInfo()
+            .then(response => {
+                setUser(response.data)
+                setName(response.data.first_name)
+                setEmail(response.data.email)
+                setPhone(response.data.phone_number)
+                setPermitToShowEmail(response.data.has_permit_to_show_email)
+                setPermitToShowPhone(response.data.has_permit_to_show_phone_number)
+                setTG(response.data.social_networks.find(network => network.property_value === 'TG')?.short_name)
+                setVK(response.data.social_networks.find(network => network.property_value === 'VK')?.short_name)
+                setOK(response.data.social_networks.find(network => network.property_value === 'OK')?.short_name)
+            })
+    }, []);
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(regData);
-        if (regData.password !== confirmPassword) {
+        if (newPassword !== confirmPassword) {
             let confirmPasswordField = document.getElementById("confirmPassword");
             confirmPasswordField.style.borderColor="#f81d1d";
             confirmPasswordField.style.backgroundColor="rgb(253 90 90 / 11%)";
             confirmPasswordField.value = "";
             confirmPasswordField.setAttribute("placeholder", "Пароль не совпадает")
+        } else {
+            const socialNetworks = [
+                {
+                    property_id: 0,
+                    short_name: tg
+                },
+                {
+                    property_id: 1,
+                    short_name: vk
+                },
+                {
+                    property_id: 2,
+                    short_name: ok
+                }
+            ]
+            const editUserDto = {
+                first_name: name,
+                email: email,
+                phone_number: phone,
+                has_permit_to_show_phone_number: permitToShowPhone,
+                has_permit_to_show_email: permitToShowEmail,
+                new_password: (newPassword.trim() === "" ? null : newPassword.trim()),
+                social_networks: socialNetworks
+            }
+            userService.editUser(editUserDto)
+                .then((response) => {
+                    console.log(response)
+                    if (newPassword.trim().length > 0) {
+                        userService.saveToken(email, newPassword.trim())
+                    }
+                    navigate('/user')
+                })
+                .catch(error => alert(error.response))
         }
-
     }
-
-    const handleDelete = () => {
-        setModalConfirmOpen(true);
-    };
 
     return (
         <div className={formstyles.form_container}>
@@ -95,40 +90,39 @@ const EditProfileForm = () => {
                        type="text"
                        placeholder="Имя"
                        required
-                       value={user.name}
+                       value={name}
                        name="name"
-                       onChange={update}
+                       onChange={e => setName(e.target.value)}
                 />
                 <label htmlFor="email">Email</label>
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Email"
-                       required
-                       value={user.email}
+                       readOnly
+                       value={email}
                        id="email"
                        name="email"
-                       onChange={update}
+                       onChange={e => setEmail(e.target.value)}
                 />
                 <label htmlFor="phone">Телефон</label>
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Телефон"
                        required
-                       value={user.phone}
+                       value={phone}
                        id="phone"
                        name="phone"
-                       onChange={update}
+                       onChange={e => setPhone(e.target.value)}
                 />
-
                 <h5 className={styles.h5}>Разрешаю показывать контакты</h5>
                 <div className={styles.checkboxes}>
                     <label>
-                        <input type="checkbox" name="emailPermit" checked={user.emailPermit} onChange={update} className={styles.real_checkbox}/>
+                        <input type="checkbox" name="emailPermit" checked={permitToShowEmail} onChange={e => setPermitToShowEmail(e.target.checked)} className={styles.real_checkbox}/>
                         <span className={styles.custom_checkbox}></span>
                         email
                     </label>
                     <label>
-                        <input type="checkbox" id="phone" name="phonePermit" checked={user.phonePermit} onChange={update} className={styles.real_checkbox}/>
+                        <input type="checkbox" id="phone" name="phonePermit" checked={permitToShowPhone} onChange={e => setPermitToShowPhone(e.target.checked)} className={styles.real_checkbox}/>
                         <span className={styles.custom_checkbox}></span>
                         телефон
                     </label>
@@ -140,7 +134,7 @@ const EditProfileForm = () => {
                        id="new_password"
                        required
                        name="password"
-                       onChange={update}
+                       onChange={e => setNewPassword(e.target.value)}
                 />
                 <label htmlFor="confirmPassword">Введите новый пароль еще раз</label>
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
@@ -151,38 +145,44 @@ const EditProfileForm = () => {
                        onChange={e => {setConfirmPassword(e.currentTarget.value)}}
                 />
                 <div className={editstyles.social_networks_container}>
-                    {
-                        user.networks.map((network) => {
-                            return (
-                                <div className={editstyles.social_network}>
-                                    <img src={`/images/icons/${network.propertyValue}.svg`} alt="Logo" className={styles.social_network_logo}/>
-                                    <input className={editstyles.input}
-                                           type="text"
-                                           placeholder="Логин"
-                                           name={network.propertyValue}
-                                           value={network.shortName}
-                                           onChange={updateNetwork}
-                                    />
-                                </div>
-                            )
-                        })
-                    }
+                    <div className={editstyles.social_network}>
+                        <img src={`/images/icons/TG.svg`} alt="Logo" className={styles.social_network_logo}/>
+                        <input className={editstyles.input}
+                               type="text"
+                               placeholder="Логин"
+                               name="TG"
+                               value={tg}
+                               onChange={e => setTG(e.target.value)}
+                        />
+                    </div>
+                    <div className={editstyles.social_network}>
+                        <img src={`/images/icons/VK.svg`} alt="Logo" className={styles.social_network_logo}/>
+                        <input className={editstyles.input}
+                               type="text"
+                               placeholder="Логин"
+                               name="VK"
+                               value={vk}
+                               onChange={e => setVK(e.target.value)}
+                        />
+                    </div>
+                    <div className={editstyles.social_network}>
+                        <img src={`/images/icons/OK.svg`} alt="Logo" className={styles.social_network_logo}/>
+                        <input className={editstyles.input}
+                               type="text"
+                               placeholder="Логин"
+                               name="OK"
+                               value={ok}
+                               onChange={e => setOK(e.target.value)}
+                        />
+                    </div>
                 </div>
+
                 <button className={formstyles.button + ' ' + formstyles.elem_in_window + ' ' + editstyles.button}
                         type="submit"
                         onClick={handleSubmit}>
                     Подтвердить изменения
                 </button>
-                <button className={`${formstyles.button} ${formstyles.elem_in_window} ${styles.delete_button}`}
-                    type="button"
-                    onClick={handleDelete}>
-                    Удалить аккаунт
-                </button>
             </form>
-            <Modal isOpen={modalConfirmIsOpen} onClose={() => setModalConfirmOpen(false)}>
-                    <h2>Вы уверены?</h2>
-                    <p>Все данные о Вас и Вашем питомце будут удалены и в случае его пропажи люди не смогут связаться с Вами через наш сервис.</p>
-            </Modal>
         </div>
     );
 }

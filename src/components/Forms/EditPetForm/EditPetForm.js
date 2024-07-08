@@ -1,64 +1,117 @@
 import formstyles from "../LoginForm/LoginForm.module.css";
 import editstyles from "../EditProfileForm/EditProfileForm.module.css";
+import petformstyles from "../PetCreationForm/PetCreationForm.module.css"
 import styles from "./EditPetForm.module.css";
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Modal from "../../Modal/Modal";
-
-// Объект данных питомца (как и ранее)
-const pet = {
-    chipId: "123456789012345",
-    stampId: "AAA111",
-    type: "Собака",
-    breed: "Терьер",
-    sex: "MALE",
-    name: "Руди",
-    features: [
-        {
-            propertyId: 0,
-            propertyValue: "Аллергия",
-            description: "Описание аллергии"
-        },
-        {
-            propertyId: 1,
-            propertyValue: "Питание",
-            description: "Какое-то описание питания"
-        },
-        {
-            propertyId: 2,
-            propertyValue: "Лекарства",
-            description: ""
-        },
-        {
-            propertyId: 3,
-            propertyValue: "Другое",
-            description: ""
-        }
-    ]
-}
+import {useNavigate, useParams} from "react-router-dom";
+import petService from "../../../services/PetService";
+import userService from "../../../services/UserService";
 
 const EditPetForm = () => {
-    const [petData, setPetData] = useState(pet);
+    const {petId} = useParams()
+    const navigate = useNavigate()
+    const [pet, setPet] = useState()
+    const [chipId, setChipId] = useState()
+    const [stampId, setStampId] = useState()
+    const [name, setName] = useState()
+    const [type, setType] = useState()
+    const [breed, setBreed] = useState()
+    const [sex, setSex] = useState()
+    const [petImage, setPetImage] = useState()
+    const [petImageName, setPetImageName] = useState()
+    const [allergy, setAllergy] = useState('')
+    const [nutrition, setNutrition] = useState('')
+    const [medicine, setMedicine] = useState('')
+    const [other, setOther] = useState('')
+    const [imageFile, setSelectedFile] = useState(null)
+    const [imageUrl, setImageUrl] = useState(null)
+    const fileInputRef = useRef(null);
+
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
+    const [imageFileText, setImageFileText] = useState()
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setPetData({ ...petData, [name]: value });
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file);
+        setImageFileText('Изменить фото')
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImageUrl(reader.result); // Сохраняем URL изображения
+        };
+        if (file) {
+            reader.readAsDataURL(file); // Читаем файл как URL
+        }
     }
 
-    const handleFeatureChange = (propertyId, description) => {
-        const updatedFeatures = petData.features.map(feature => {
-            if (feature.propertyId === propertyId) {
-                return { ...feature, description }
-            }
-            return feature
-        });
-        setPetData({ ...petData, features: updatedFeatures });
-    }
+    const handleClick = () => {
+        fileInputRef.current.click();
+    };
+
+    useEffect(() => {
+        petService.getPetEditInfo(petId)
+            .then(response => {
+                setPet(response.data)
+                setChipId(response.data?.chip_id)
+                setStampId(response.data?.stamp_id)
+                setName(response.data?.name)
+                setPetImageName(response.data?.pet_image?.image_uuid_name)
+                if (response.data?.pet_image?.image_uuid_name === 'default-pet-image.png') {
+                    setImageFileText('Добавить фото')
+                }
+                else {
+                    setImageFileText('Изменить фото')
+                }
+                setType(response.data?.type)
+                setBreed(response.data?.breed)
+                setSex(response.data?.sex)
+                setAllergy(response.data?.features[0]?.description)
+                setNutrition(response.data?.features[1]?.description)
+                setMedicine(response.data?.features[2]?.description)
+                setOther(response.data?.features[3]?.description)
+            })
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Логика обработки отправленных данных
-        console.log(petData);
+        const features = [
+            {
+                property_id: 0,
+                description: allergy != null ? allergy : ""
+            },
+            {
+                property_id: 1,
+                description: nutrition != null ? nutrition : ""
+            },
+            {
+                property_id: 2,
+                description: medicine != null ? medicine : ""
+            },
+            {
+                property_id: 3,
+                description: other != null ? other : ""
+            },
+        ]
+        const pet = {
+            chip_id: chipId,
+            stamp_id: stampId,
+            type: type,
+            breed: breed,
+            sex: sex,
+            name: name,
+            features: features,
+            pet_image: null
+        }
+        const formData = new FormData()
+        formData.append('pet', new Blob([JSON.stringify(pet)], { type: 'application/json' }));
+        formData.append('image_file', imageFile)
+
+        petService.editPet(petId, formData)
+            .then(response => navigate('/user'))
+            .catch(error => alert(`${error.response.status}: ${error.response.data}`))
+
     };
 
     const handleDelete = () => {
@@ -74,10 +127,9 @@ const EditPetForm = () => {
                     type="text"
                     placeholder="Чип"
                     required
-                    readOnly
-                    value={petData.chipId}
+                    value={chipId}
                     name="chipId"
-                    onChange={handleChange}
+                    onChange={e => setChipId(e.target.value)}
                 />
                 <label htmlFor="stampId">Клеймо</label>
                 <input className={`${editstyles.input} ${formstyles.elem_in_window}`}
@@ -85,38 +137,38 @@ const EditPetForm = () => {
                     type="text"
                     placeholder="Клеймо"
                     required
-                    value={petData.stampId}
+                    value={stampId}
                     name="stampId"
-                    onChange={handleChange}
+                    onChange={e => setStampId(e.target.value)}
                 />
                 <label htmlFor="type">Вид</label>
                 <input className={`${editstyles.input} ${formstyles.elem_in_window}`}
                     type="text"
                     placeholder="Вид"
                     required
-                    value={petData.type}
+                    value={type}
                     id="type"
                     name="type"
-                    onChange={handleChange}
+                    onChange={e => setType(e.target.value)}
                 />
                 <label htmlFor="breed">Порода</label>
                 <input className={`${editstyles.input} ${formstyles.elem_in_window}`}
                     type="text"
                     placeholder="Порода"
                     required
-                    value={petData.breed}
+                    value={breed}
                     id="breed"
                     name="breed"
-                    onChange={handleChange}
+                    onChange={e => setBreed(e.target.value)}
                 />
                 <div className={styles.radios_container}>
                     <label>
-                        <input type="radio" id="female" name="sex" value="FEMALE" checked={petData.sex === "FEMALE"} onChange={handleChange} className={styles.real_radio} />
+                        <input type="radio" id="female" name="sex" value="FEMALE" checked={sex === "FEMALE"} onChange={e => setSex(e.target.value)} className={styles.real_radio} />
                         <span className={styles.custom_radio}></span>
                         Самка
                     </label>
                     <label>
-                        <input type="radio" id="male" name="sex" value="MALE" checked={petData.sex === "MALE"} onChange={handleChange} className={styles.real_radio} />
+                        <input type="radio" id="male" name="sex" value="MALE" checked={sex === "MALE"} onChange={e => setSex(e.target.value)} className={styles.real_radio} />
                         <span className={styles.custom_radio}></span>
                         Самец
                     </label>
@@ -126,27 +178,70 @@ const EditPetForm = () => {
                     type="text"
                     placeholder="Кличка"
                     required
-                    value={petData.name}
+                    value={name}
                     id="name"
                     name="name"
-                    onChange={handleChange}
+                    onChange={e => setName(e.target.value)}
                 />
+
+                {imageUrl &&
+                    <div className={`${styles.wrapper} ${styles.pet_card} ${formstyles.elem_in_window}`}
+                         style={{background: `url(${imageUrl})`}}>
+                    </div>
+                }
+                {imageUrl == null &&
+                    <div className={`${styles.wrapper} ${styles.pet_card} ${formstyles.elem_in_window}`}
+                         style={{background: "url('http://localhost:8080/api/v1/pet/images/" + petImageName + "')"}}>
+                    </div>
+                }
+
+                <div className={styles.file_container}>
+                    <input type="file" id="real-file" accept="image/png, image/jpeg" style={{display: 'none'}} ref={fileInputRef} onChange={handleFileUpload}/>
+                    <button type="button" id="custom-button" onClick={handleClick}>+</button>
+                    <span id="custom-text">{imageFileText}</span>
+                </div>
                 <div className={styles.features}>
                     <h2>Особенности</h2>
-                    {petData.features.map((feature) => {
-                        return (
-                            <div key={feature.propertyId}>
-                                <label htmlFor={feature.propertyValue}>{feature.propertyValue}</label>
-                                <input
-                                    className={`${editstyles.input} ${formstyles.elem_in_window}`}
-                                    id={feature.propertyValue}
-                                    type="text"
-                                    value={feature.description}
-                                    onChange={(e) => handleFeatureChange(feature.propertyId, e.target.value)}
-                                />
-                            </div>
-                        )
-                    })}
+                    <div key={0}>
+                        <label htmlFor="Аллергия">Аллергия</label>
+                        <input
+                            className={`${editstyles.input} ${formstyles.elem_in_window}`}
+                            id={0}
+                            type="text"
+                            value={allergy}
+                            onChange={(e) => setAllergy(e.target.value)}
+                        />
+                    </div>
+                    <div key={1}>
+                        <label htmlFor="Питание">Питание</label>
+                        <input
+                            className={`${editstyles.input} ${formstyles.elem_in_window}`}
+                            id={1}
+                            type="text"
+                            value={nutrition}
+                            onChange={(e) => setNutrition(e.target.value)}
+                        />
+                    </div>
+                    <div key={2}>
+                        <label htmlFor="Лекарства">Лекарства</label>
+                        <input
+                            className={`${editstyles.input} ${formstyles.elem_in_window}`}
+                            id={2}
+                            type="text"
+                            value={medicine}
+                            onChange={(e) => setMedicine(e.target.value)}
+                        />
+                    </div>
+                    <div key={3}>
+                        <label htmlFor="Другое">Другое</label>
+                        <input
+                            className={`${editstyles.input} ${formstyles.elem_in_window}`}
+                            id={3}
+                            type="text"
+                            value={other}
+                            onChange={(e) => setOther(e.target.value)}
+                        />
+                    </div>
                 </div>
                 <button className={`${formstyles.button} ${formstyles.elem_in_window} ${editstyles.button}`}
                     type="submit"

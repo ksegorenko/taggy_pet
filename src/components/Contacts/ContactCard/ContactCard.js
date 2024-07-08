@@ -10,12 +10,12 @@ const ContactCard = ({user}) => {
                 <table className={styles.user}>
                     <tr>
                         <td className={styles.title_table}>Имя</td>
-                        <td className={styles.data_table}>{user.firstName}</td>
+                        <td className={styles.data_table}>{user.first_name}</td>
                     </tr>
-                    { user.phoneNumber != null &&
+                    { user.phone_number != null &&
                         <tr>
                             <td className={styles.title_table}>Телефон</td>
-                            <td className={styles.data_table}>{user.phoneNumber}</td>
+                            <td className={styles.data_table}>{user.phone_number}</td>
                         </tr>
                     }
                     { user.email != null &&
@@ -27,7 +27,7 @@ const ContactCard = ({user}) => {
                 </table>
                 <div className={styles.social_networks_container}>
                     {
-                        user.socialNetworks.map((network) => {
+                        user.social_networks.map((network) => {
                             return <SocialNetworkLink socialNetwork={network}/>
                         })
                     }

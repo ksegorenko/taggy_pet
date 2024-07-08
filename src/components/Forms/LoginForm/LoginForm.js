@@ -12,6 +12,16 @@ const LoginForm = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        console.log(email)
+        console.log(password)
+        authenticationService.login(email, password)
+            .then(response => {
+                console.log(response.status)
+                authenticationService.saveToken(email, password)
+                navigate('/')
+            })
+            .catch(error => console.log(error.response.status))
+
     }
 
     return (

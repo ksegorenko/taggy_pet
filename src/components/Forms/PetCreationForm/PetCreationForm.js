@@ -1,15 +1,24 @@
 import formstyles from "../LoginForm/LoginForm.module.css";
 import styles from "./PetCreationForm.module.css"
 import {useRef, useState} from "react";
+import userService from "../../../services/UserService";
+import imageService from "../../../services/ImageService";
 
 const PetCreationForm = () => {
+    const [chipId, setChipId] = useState("")
+    const [stampId, setStampId] = useState("")
+    const [type, setType] = useState("")
+    const [breed, setBreed] = useState("")
     const [sex, setSex] = useState('MALE')
+    const [name, setName] = useState("")
 
-    const [selectedFile, setSelectedFile] = useState(null)
+    const [imageFile, setSelectedFile] = useState(null)
     const fileInputRef = useRef(null);
 
-    const update = () => {
-    }
+    const [allergy, setAllergy] = useState("")
+    const [medicine, setMedicine] = useState("")
+    const [nutrition, setNutrition] = useState("")
+    const [other, setOther] = useState("")
 
     const handleSex = (event) => {
         setSex(event.target.value)
@@ -25,8 +34,42 @@ const PetCreationForm = () => {
         fileInputRef.current.click();
     };
 
-    const handleSubmit = () => {
-        console.log(sex)
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const features = [
+            {
+                property_id: 0,
+                description: allergy
+            },
+            {
+                property_id: 1,
+                description: nutrition
+            },
+            {
+                property_id: 2,
+                description: medicine
+            },
+            {
+                property_id: 3,
+                description: other
+            },
+        ]
+        const pet = {
+            chip_id: chipId,
+            stamp_id: stampId,
+            type: type,
+            breed: breed,
+            sex: sex,
+            name: name,
+            features: features
+        }
+        const formData = new FormData()
+        formData.append('pet', new Blob([JSON.stringify(pet)], { type: 'application/json' }));
+        formData.append('image_file', imageFile)
+
+        userService.addPet(formData)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
     }
 
     return (
@@ -39,28 +82,28 @@ const PetCreationForm = () => {
                        maxLength="15"
                        required
                        name="chipId"
-                       onChange={update}
+                       onChange={e => setChipId(e.target.value)}
                 /><br/><br/>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Клеймо"
                        required
                        name="stampId"
-                       onChange={update}
+                       onChange={e => setStampId(e.target.value)}
                 /><br/><br/>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Вид животного"
                        required
                        name="type"
-                       onChange={update}
+                       onChange={e => setType(e.target.value)}
                 /><br/><br/>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Порода"
                        required
                        name="breed"
-                       onChange={update}
+                       onChange={e => setBreed(e.target.value)}
                 /><br/><br/>
                 <div className={styles.radios_container}>
                     <label>
@@ -79,16 +122,45 @@ const PetCreationForm = () => {
                        placeholder="Кличка"
                        required
                        name="name"
-                       onChange={update}
+                       onChange={e => setName(e.target.value)}
                 /><br/><br/>
+                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                       type="text"
+                       placeholder="Аллергия"
+                       required
+                       name="allergy"
+                       onChange={e => setAllergy(e.target.value)}
+                /><br/><br/>
+                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                       type="text"
+                       placeholder="Питание"
+                       required
+                       name="nutrition"
+                       onChange={e => setNutrition(e.target.value)}
+                /><br/><br/>
+                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                       type="text"
+                       placeholder="Лекарства"
+                       required
+                       name="medicine"
+                       onChange={e => setMedicine(e.target.value)}
+                /><br/><br/>
+                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                       type="text"
+                       placeholder="Другое"
+                       required
+                       name="other"
+                       onChange={e => setOther(e.target.value)}
+                /><br/><br/>
+
                 <div className={styles.file_container}>
                     <input type="file" id="real-file" accept="image/png, image/jpeg" style={{display: 'none'}} ref={fileInputRef} onChange={handleFileUpload}/>
                     <button type="button" id="custom-button" onClick={handleClick}>+</button>
-                    <span id="custom-text">{selectedFile != null ? selectedFile.name : 'Фото не выбрано'}</span>
+                    <span id="custom-text">{imageFile != null ? imageFile.name : 'Фото не выбрано'}</span>
                 </div>
                 <button className={formstyles.button + ' ' + formstyles.elem_in_window}
                         type="submit"
-                        onClick={handleSubmit}>
+                        onClick={e => handleSubmit(e)}>
                     Добавить
                 </button>
             </form>

@@ -2,6 +2,7 @@ import {useState} from "react";
 import styles from "./PetSearchFrom.module.css"
 import {useNavigate} from "react-router-dom";
 import {usePetInfo} from "../../../hooks/PetHooks";
+import petService from "../../../services/PetService";
 
 const PetSearchForm = () => {
     const [searchParameter, setSearchParameter] = useState('');
@@ -14,7 +15,14 @@ const PetSearchForm = () => {
     }
 
     const findPet = (event) => {
-        event.preventDefault();
+        event.preventDefault()
+
+        petService.getPetInfoBySearchParameter(searchParameter)
+            .then(response => {
+                let pet = response.data
+                navigate('/pet/info/' + searchParameter, { state: {pet} })
+            })
+
         navigate(`/pet/info/${searchParameter}`)
     }
 
