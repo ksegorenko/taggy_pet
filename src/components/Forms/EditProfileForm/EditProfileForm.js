@@ -174,9 +174,9 @@ const EditProfileForm = () => {
                     Подтвердить изменения
                 </button>
                 <button className={`${formstyles.button} ${formstyles.elem_in_window} ${styles.delete_button}`}
-                    type="delete_button"
+                    type="button"
                     onClick={handleDelete}>
-                    Удалить профиль
+                    Удалить аккаунт
                 </button>
             </form>
             <Modal isOpen={modalConfirmIsOpen} onClose={() => setModalConfirmOpen(false)}>
