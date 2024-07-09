@@ -12,8 +12,8 @@ const RegistrationForm = () => {
         emailPermit: '',
         phonePermit: '',
         password: '',
-        logins: { }
-    })
+        logins: {}
+    });
 
     const [confirmPassword, setConfirmPassword] = useState('');
     const [toggle, setToggle] = useState(false);
@@ -48,8 +48,8 @@ const RegistrationForm = () => {
         console.log(regData);
         if (regData.password !== confirmPassword) {
             let confirmPasswordField = document.getElementById("confirmPassword");
-            confirmPasswordField.style.borderColor="#f81d1d";
-            confirmPasswordField.style.backgroundColor="rgb(253 90 90 / 11%)";
+            confirmPasswordField.style.borderColor = "#f81d1d";
+            confirmPasswordField.style.backgroundColor = "rgb(253 90 90 / 11%)";
             confirmPasswordField.value = "";
             confirmPasswordField.setAttribute("placeholder", "Пароль не совпадает")
         }
@@ -84,13 +84,13 @@ const RegistrationForm = () => {
                 <div className={styles.checkboxes}>
                     <label>
                         <input type="checkbox" name="emailPermit" onChange={update} className={styles.real_checkbox}/>
-                            <span className={styles.custom_checkbox}></span>
-                            email
+                        <span className={styles.custom_checkbox}></span>
+                        email
                     </label>
                     <label>
                         <input type="checkbox" id="phone" name="phonePermit" onChange={update} className={styles.real_checkbox}/>
-                            <span className={styles.custom_checkbox}></span>
-                            телефон
+                        <span className={styles.custom_checkbox}></span>
+                        телефон
                     </label>
                 </div>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
@@ -105,25 +105,24 @@ const RegistrationForm = () => {
                        placeholder="Повторите пароль"
                        required
                        id="confirmPassword"
-                       onChange={e => {setConfirmPassword(e.currentTarget.value)}}
+                       onChange={e => { setConfirmPassword(e.currentTarget.value) }}
                 /><br/><br/>
                 <div className={styles.checked}>
                     <label>
                         <input type="checkbox" name="features_checkbox" id="check" onChange={e => setToggle(e.currentTarget.checked)} className={styles.real_checkbox}/>
-                            <span className={styles.custom_checkbox}></span>
-                            Указать соцсети
+                        <span className={styles.custom_checkbox}></span>
+                        Указать соцсети
                     </label>
                     {toggle && (
                         socialNetworks.map((network) => {
                             return (
-                                <div className={styles.social_networks_container}>
-                                    <img src={`/images/icons/${network}.svg`} alt="Logo" className={styles.social_network_logo}/>
+                                <div key={network} className={styles.social_networks_container}>
+                                    <img src={`/images/icons/${network}.svg`} alt="Logo" className={styles.social_network_logo} />
                                     <input className={styles.input}
-                                        type="text"
-                                        placeholder="Логин"
-                                        name={network.propertyValue}
-                                        value={network.shortName}
-                                        onChange={updateNetwork}
+                                           type="text"
+                                           placeholder={network === 'OK' ? 'Ссылка на профиль' : '@Username'}
+                                           name={network}
+                                           onChange={updateNetwork}
                                     />
                                 </div>
                             )
