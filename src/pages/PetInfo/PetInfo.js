@@ -62,7 +62,6 @@ const pet = {
 }
 
 const PetInfo = () => {
-    const {searchParameter} = useParams()
 
     return (
         <div className={styles.white_background}>
