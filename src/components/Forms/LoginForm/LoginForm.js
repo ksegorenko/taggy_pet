@@ -17,6 +17,7 @@ const LoginForm = () => {
         authenticationService.login(email, password)
             .then(response => {
                 console.log(response.status)
+                console.log(document.cookie)
                 authenticationService.saveToken(email, password)
                 navigate('/')
             })

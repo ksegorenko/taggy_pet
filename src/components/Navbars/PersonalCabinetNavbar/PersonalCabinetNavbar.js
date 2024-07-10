@@ -4,17 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import styles from "./PersonalCabinetNavbar.module.css";
 import Modal from "../../Modal/Modal";
+import userService from "../../../services/UserService";
 
 const PersonalCabinetNavbar = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown
     const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
-    const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     const handleLogout = (e) => {
         e.preventDefault();
-        queryClient.removeQueries('user');
+        userService.logout();
         navigate(`/`);
     }
 

@@ -71,10 +71,7 @@ const EditProfileForm = () => {
             }
             userService.editUser(editUserDto)
                 .then((response) => {
-                    console.log(response)
-                    if (newPassword.trim().length > 0) {
-                        userService.saveToken(email, newPassword.trim())
-                    }
+                    userService.saveToken(email, newPassword.trim())
                     navigate('/user')
                 })
                 .catch(error => alert(error.response))
