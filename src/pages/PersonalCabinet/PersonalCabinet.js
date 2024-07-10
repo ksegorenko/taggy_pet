@@ -8,56 +8,37 @@ import authenticationService from "../../services/AuthenticationService";
 import {useEffect, useState} from "react";
 import userService from "../../services/UserService";
 
-const user_def = {
-    firstName: "Александр",
-    email: "osipov@gmail.com",
-    phoneNumber: "+79131232211",
-    socialNetworks: [
-        {
-            name: "VK",
-            login: "osipover"
-        },
-        {
-            name: "TG",
-            login: "osipover"
-        }
-    ],
-    pets: [
-        {
-            chipId: "123456789012345",
-            stampId: "12345",
-            name: "Жорик",
-            imageUUIDName: "768c2b7b2ccdf2be2dc8b10546181d0b.jpg"
-        },
-        {
-            chipId: "543210987654321",
-            stampId: "12345",
-            name: "Руди",
-            imageUUIDName: "default-pet-image.png"
-        }
-    ]
-}
-
 const PersonalCabinet = () => {
     const navigate = useNavigate()
     const [user, setUser] = useState({})
 
     useEffect(() => {
-        if (!authenticationService.isUserAuthorized()) {
-            navigate('/login')
-        }
-    }, []);
-
-    useEffect(() => {
         userService.getUserInfo()
             .then(response => {
-                console.log(response)
                 setUser(response.data)
             })
             .catch(error => {
-                if (error.response.status === 401) navigate('/login')
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            userService.getUserInfo()
+                                .then(response => {
+                                    setUser(response.data)
+                                })
+                                .catch(error => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                })
+                        })
+                        .catch(error => {
+                            authenticationService.deleteTokens()
+                            navigate('/login')
+                        })
+                }
             })
     }, []);
+
 
     return (
         <div className={styles.white_background}>

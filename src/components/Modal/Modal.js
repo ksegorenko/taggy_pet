@@ -1,6 +1,6 @@
 import styles from "./Modal.module.css"
 
-const Modal = ({isOpen, onClose, children}) => {
+const Modal = ({isOpen, onClose, onDelete, children}) => {
     return (
         <>
             {isOpen && (
@@ -10,7 +10,7 @@ const Modal = ({isOpen, onClose, children}) => {
                             <div className={styles.close} id="pop-up-close" onClick={() => onClose()}>✕</div>
                             {children}
                             <div className={styles.buttons_container}>
-                                <button className={styles.delete_button}>Удалить</button>
+                                <button className={styles.delete_button} onClick={() => onDelete()} >Удалить</button>
                                 <button className={styles.close_button} onClick={() => onClose()}>Отменить</button>
                             </div>
                         </div>

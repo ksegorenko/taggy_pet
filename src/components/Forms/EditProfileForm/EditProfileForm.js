@@ -5,6 +5,8 @@ import styles from "../RegistrationForm/RegistrationForm.module.css";
 import editstyles from "./EditProfileForm.module.css"
 import userService from "../../../services/UserService";
 import {useNavigate} from "react-router-dom";
+import authenticationService from "../../../services/AuthenticationService";
+import petService from "../../../services/PetService";
 
 
 const EditProfileForm = () => {
@@ -16,24 +18,48 @@ const EditProfileForm = () => {
     const [phone, setPhone] = useState()
     const [permitToShowEmail, setPermitToShowEmail] = useState()
     const [permitToShowPhone, setPermitToShowPhone] = useState()
-    const [newPassword, setNewPassword] = useState()
+    const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('');
     const [tg, setTG] = useState()
     const [vk, setVK] = useState()
     const [ok, setOK] = useState()
 
+    const setUserData = response => {
+        setUser(response.data)
+        setName(response.data.first_name)
+        setEmail(response.data.email)
+        setPhone(response.data.phone_number)
+        setPermitToShowEmail(response.data.has_permit_to_show_email)
+        setPermitToShowPhone(response.data.has_permit_to_show_phone_number)
+        setTG(response.data.social_networks.find(network => network.property_value === 'TG')?.short_name)
+        setVK(response.data.social_networks.find(network => network.property_value === 'VK')?.short_name)
+        setOK(response.data.social_networks.find(network => network.property_value === 'OK')?.short_name)
+    }
+
     useEffect(() => {
         userService.getUserEditInfo()
             .then(response => {
-                setUser(response.data)
-                setName(response.data.first_name)
-                setEmail(response.data.email)
-                setPhone(response.data.phone_number)
-                setPermitToShowEmail(response.data.has_permit_to_show_email)
-                setPermitToShowPhone(response.data.has_permit_to_show_phone_number)
-                setTG(response.data.social_networks.find(network => network.property_value === 'TG')?.short_name)
-                setVK(response.data.social_networks.find(network => network.property_value === 'VK')?.short_name)
-                setOK(response.data.social_networks.find(network => network.property_value === 'OK')?.short_name)
+                setUserData(response)
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            userService.getUserEditInfo()
+                                .then(response => {
+                                    setUserData(response)
+                                })
+                                .catch(error => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                })
+                        })
+                        .catch(error => {
+                            authenticationService.deleteTokens()
+                            navigate('/login')
+                        })
+                }
             })
     }, []);
 
@@ -46,20 +72,11 @@ const EditProfileForm = () => {
             confirmPasswordField.value = "";
             confirmPasswordField.setAttribute("placeholder", "Пароль не совпадает")
         } else {
-            const socialNetworks = [
-                {
-                    property_id: 0,
-                    short_name: tg
-                },
-                {
-                    property_id: 1,
-                    short_name: vk
-                },
-                {
-                    property_id: 2,
-                    short_name: ok
-                }
-            ]
+            const socialNetworks = []
+            if (tg != null && tg.trim() !== '') socialNetworks.push({property_id: 0, short_name: tg})
+            if (vk != null && vk.trim() !== '') socialNetworks.push({property_id: 1, short_name: vk})
+            if (ok != null && ok.trim() !== '') socialNetworks.push({property_id: 2, short_name: ok})
+
             const editUserDto = {
                 first_name: name,
                 email: email,
@@ -70,17 +87,31 @@ const EditProfileForm = () => {
                 social_networks: socialNetworks
             }
             userService.editUser(editUserDto)
-                .then((response) => {
-                    userService.saveToken(email, newPassword.trim())
-                    navigate('/user')
+                .then(response => navigate('/user'))
+                .catch(error => {
+                    if (error.response.status === 401) {
+                        authenticationService.refreshToken()
+                            .then(response => {
+                                authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                                userService.editUser(editUserDto)
+                                    .then(response => navigate('/user'))
+                                    .catch(error => {
+                                        authenticationService.deleteTokens()
+                                        navigate('/login')
+                                    })
+                            })
+                            .catch(error => {
+                                authenticationService.deleteTokens()
+                                navigate('/login')
+                            })
+                    }
                 })
-                .catch(error => alert(error.response))
         }
     }
 
     return (
         <div className={formstyles.form_container}>
-            <form action="" className={formstyles.form}>
+            <form action="" className={formstyles.form} onSubmit={e => handleSubmit(e)}>
                 <label htmlFor="firstName">Имя</label>
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
                        id="firstName"
@@ -129,7 +160,6 @@ const EditProfileForm = () => {
                        type="password"
                        placeholder="Пароль"
                        id="new_password"
-                       required
                        name="password"
                        onChange={e => setNewPassword(e.target.value)}
                 />
@@ -137,7 +167,6 @@ const EditProfileForm = () => {
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
                        type="password"
                        placeholder="Повторите пароль"
-                       required
                        id="confirmPassword"
                        onChange={e => {setConfirmPassword(e.currentTarget.value)}}
                 />
@@ -175,8 +204,7 @@ const EditProfileForm = () => {
                 </div>
 
                 <button className={formstyles.button + ' ' + formstyles.elem_in_window + ' ' + editstyles.button}
-                        type="submit"
-                        onClick={handleSubmit}>
+                        type="submit">
                     Подтвердить изменения
                 </button>
             </form>

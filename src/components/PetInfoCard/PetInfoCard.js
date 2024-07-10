@@ -1,8 +1,6 @@
 import {Col, Container, Row} from "react-bootstrap";
 import styles from "./PetInfoCard.module.css"
-import {useQueryClient} from "@tanstack/react-query";
-import {usePetInfo} from "../../hooks/PetHooks";
-import {useParams} from "react-router-dom";
+import * as Endpoint from "../../services/Endpoints"
 
 
 const PetInfoCard = ({pet}) => {
@@ -25,7 +23,7 @@ const PetInfoCard = ({pet}) => {
                                          backgroundRepeat: "no-repeat",
                                          backgroundPosition: "center",
                                          backgroundSize: "cover",
-                                         backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1)), url('http://localhost:8080/api/v1/pet/images/" + pet.pet_image?.image_uuid_name + "')",
+                                         backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1)), url(" + Endpoint.IMAGE_ENDPOINT + "/" + pet.pet_image?.image_uuid_name + "')",
                                      }}>
                                     <div className={styles.pet_name}>
                                         <h4 id="pets-name">{pet.name}</h4>

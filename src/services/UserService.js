@@ -1,57 +1,54 @@
 import axios from "axios";
+import * as Endpoint from './Endpoints'
 
 class UserService {
-    #BASE_URL = 'http://localhost:8080/api/v1/user'
 
     async getUserInfo() {
-        const token = localStorage.getItem('token')
-        return await axios.get(this.#BASE_URL + '/info', {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.get(`${Endpoint.USER_ENDPOINT}/info`, {
             headers: {
-                Authorization: `Basic ${token}`
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+    }
+
+    async deleteUser() {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.delete(`${Endpoint.USER_ENDPOINT}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
             }
         })
     }
 
     async addPet(formData) {
-        const token = localStorage.getItem('token')
-        return await axios.post(this.#BASE_URL + '/pets', formData,
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.post(`${Endpoint.USER_ENDPOINT}/pets`, formData,
             {
             headers: {
-                'Authorization': `Basic ${token}`,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'multipart/form-data'
             }
         })
     }
 
     async getUserEditInfo() {
-        const token = localStorage.getItem('token')
-        return await axios.get(this.#BASE_URL + '/edit', {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.get(`${Endpoint.USER_ENDPOINT}/edit`, {
             headers: {
-                Authorization: `Basic ${token}`
+                Authorization: `Bearer ${accessToken}`
             }
         })
     }
 
     async editUser(editUserDto) {
-        const token = localStorage.getItem('token')
-        return await axios.put(this.#BASE_URL + '/edit', editUserDto,
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.put(`${Endpoint.USER_ENDPOINT}/edit`, editUserDto,
             {
                 headers: {
-                    'Authorization': `Basic ${token}`
+                    Authorization: `Bearer ${accessToken}`
                 }
             })
-    }
-
-    saveToken(email, password) {
-        localStorage.setItem('token', btoa(`${email}:${password}`))
-    }
-
-    isUserAuthorized() {
-        return localStorage.getItem('token') != null
-    }
-
-    logout() {
-        localStorage.removeItem('token')
     }
 }
 

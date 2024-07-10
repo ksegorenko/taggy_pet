@@ -5,6 +5,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import styles from "./PersonalCabinetNavbar.module.css";
 import Modal from "../../Modal/Modal";
 import userService from "../../../services/UserService";
+import authenticationService from "../../../services/AuthenticationService";
+import petService from "../../../services/PetService";
 
 const PersonalCabinetNavbar = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
@@ -14,8 +16,37 @@ const PersonalCabinetNavbar = () => {
 
     const handleLogout = (e) => {
         e.preventDefault();
-        userService.logout();
+        authenticationService.logout();
         navigate(`/`);
+    }
+
+    const deleteUser = () => {
+        userService.deleteUser()
+            .then(response => {
+                authenticationService.deleteTokens()
+                navigate('/')
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            userService.deleteUser()
+                                .then(response => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/')
+                                })
+                                .catch(error => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                })
+                        })
+                        .catch(error => {
+                            authenticationService.deleteTokens()
+                            navigate('/login')
+                        })
+                }
+            })
     }
 
     // Handle window resize
@@ -71,7 +102,7 @@ const PersonalCabinetNavbar = () => {
                     </Link>
                 </Col>
             </Row>
-            <Modal isOpen={modalConfirmIsOpen} onClose={() => setModalConfirmOpen(false)}>
+            <Modal isOpen={modalConfirmIsOpen} onClose={() => setModalConfirmOpen(false)} onDelete={deleteUser}>
                 <h2>Вы уверены?</h2>
                 <p>Все ваши данные будут удалены вместе с информацией о питомцах.</p>
             </Modal>

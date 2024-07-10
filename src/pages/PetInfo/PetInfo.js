@@ -4,21 +4,20 @@ import PetInfoNavbar from "../../components/Navbars/PetInfoNavbar/PetInfoNavbar"
 import PetInfoCard from "../../components/PetInfoCard/PetInfoCard";
 import PetFeatures from "../../components/PetFeatures/PetFeatures";
 import Contacts from "../../components/Contacts/Contacts";
-import {useLocation, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import petService from "../../services/PetService";
 
 
 const PetInfo = () => {
     const location = useLocation();
-    const [pet, setPet] = useState()
-    const {searchParameter} = useParams()
+    const navigate = useNavigate();
+    if (!location.state || !location.state.pet) {
+        navigate('/');
+        return null;
+    }
 
-    useEffect(() => {
-        petService.getPetInfoBySearchParameter(searchParameter)
-            .then(response => setPet(response.data))
-            .catch(error => alert('К сожалению, в нашей базе нет информации об этом питомце'))
-    }, []);
+    const { pet } = location.state;
 
     return (
         <div className={styles.white_background}>

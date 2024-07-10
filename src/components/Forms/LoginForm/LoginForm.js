@@ -1,9 +1,10 @@
 import {useState} from "react";
 import styles from "./LoginForm.module.css"
-import useAuth from "../../../hooks/AuthHook";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
 import authenticationService from "../../../services/AuthenticationService";
 import {useNavigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -12,16 +13,15 @@ const LoginForm = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log(email)
-        console.log(password)
         authenticationService.login(email, password)
             .then(response => {
-                console.log(response.status)
-                console.log(document.cookie)
-                authenticationService.saveToken(email, password)
-                navigate('/')
+                localStorage.setItem('access_token', response.data.access_token)
+                localStorage.setItem('refresh_token', response.data.refresh_token)
+                navigate('/user')
             })
-            .catch(error => console.log(error.response.status))
+            .catch(error => {
+                toast.error('Неверный логин или пароль')
+            })
 
     }
 
@@ -50,6 +50,7 @@ const LoginForm = () => {
                     Войти
                 </button>
             </form>
+            <ToastContainer/>
         </div>
     );
 }

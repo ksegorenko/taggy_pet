@@ -7,6 +7,9 @@ import Modal from "../../Modal/Modal";
 import {useNavigate, useParams} from "react-router-dom";
 import petService from "../../../services/PetService";
 import userService from "../../../services/UserService";
+import authenticationService from "../../../services/AuthenticationService";
+import {toast, ToastContainer} from "react-toastify";
+import * as Endpoint from "../../../services/Endpoints";
 
 const EditPetForm = () => {
     const {petId} = useParams()
@@ -50,69 +53,124 @@ const EditPetForm = () => {
         fileInputRef.current.click();
     };
 
+    const setPetData = response => {
+        setPet(response.data)
+        setChipId(response.data?.chip_id)
+        setStampId(response.data?.stamp_id)
+        setName(response.data?.name)
+        setPetImageName(response.data?.pet_image?.image_uuid_name)
+        if (response.data?.pet_image?.image_uuid_name === 'default-pet-image.png') {
+            setImageFileText('Добавить фото')
+        }
+        else {
+            setImageFileText('Изменить фото')
+        }
+        setType(response.data?.type)
+        setBreed(response.data?.breed)
+        setSex(response.data?.sex)
+        setAllergy(response.data?.features[0]?.description)
+        setNutrition(response.data?.features[1]?.description)
+        setMedicine(response.data?.features[2]?.description)
+        setOther(response.data?.features[3]?.description)
+    }
+
     useEffect(() => {
         petService.getPetEditInfo(petId)
             .then(response => {
-                setPet(response.data)
-                setChipId(response.data?.chip_id)
-                setStampId(response.data?.stamp_id)
-                setName(response.data?.name)
-                setPetImageName(response.data?.pet_image?.image_uuid_name)
-                if (response.data?.pet_image?.image_uuid_name === 'default-pet-image.png') {
-                    setImageFileText('Добавить фото')
+                setPetData(response)
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            petService.getPetEditInfo(petId)
+                                .then(response => {
+                                    setPetData(response)
+                                })
+                                .catch(error => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                })
+                        })
+                        .catch(error => {
+                            authenticationService.deleteTokens()
+                            navigate('/login')
+                        })
                 }
-                else {
-                    setImageFileText('Изменить фото')
-                }
-                setType(response.data?.type)
-                setBreed(response.data?.breed)
-                setSex(response.data?.sex)
-                setAllergy(response.data?.features[0]?.description)
-                setNutrition(response.data?.features[1]?.description)
-                setMedicine(response.data?.features[2]?.description)
-                setOther(response.data?.features[3]?.description)
             })
     }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const features = [
-            {
-                property_id: 0,
-                description: allergy != null ? allergy : ""
-            },
-            {
-                property_id: 1,
-                description: nutrition != null ? nutrition : ""
-            },
-            {
-                property_id: 2,
-                description: medicine != null ? medicine : ""
-            },
-            {
-                property_id: 3,
-                description: other != null ? other : ""
-            },
-        ]
-        const pet = {
-            chip_id: chipId,
-            stamp_id: stampId,
-            type: type,
-            breed: breed,
-            sex: sex,
-            name: name,
-            features: features,
-            pet_image: null
+        if (chipId.trim() === '' && stampId.trim() === '') {
+            toast.error('Необходимо указать чип или клеймо питомца');
+        } else {
+            const features = []
+            if (allergy != null && allergy.trim() !== '') features.push({property_id: 0, description: allergy})
+            if (nutrition != null && nutrition.trim() !== '') features.push({property_id: 1, description: nutrition})
+            if (medicine != null && medicine.trim() !== '') features.push({property_id: 2, description: medicine})
+            if (other != null && other.trim() !== '') features.push({property_id: 3, description: other})
+
+            const pet = {
+                chip_id: chipId,
+                stamp_id: stampId,
+                type: type,
+                breed: breed,
+                sex: sex,
+                name: name,
+                features: features,
+                pet_image: null
+            }
+            const formData = new FormData()
+            formData.append('pet', new Blob([JSON.stringify(pet)], { type: 'application/json' }));
+            formData.append('image_file', imageFile)
+
+            petService.editPet(petId, formData)
+                .then(response => navigate('/user'))
+                .catch(error => {
+                    if (error.response.status === 401) {
+                        authenticationService.refreshToken()
+                            .then(response => {
+                                authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                                petService.editPet(petId, formData)
+                                    .then(response => navigate('/user'))
+                                    .catch(error => {
+                                        authenticationService.deleteTokens()
+                                        navigate('/login')
+                                    })
+                            })
+                            .catch(error => {
+                                authenticationService.deleteTokens()
+                                navigate('/login')
+                            })
+                    }
+                })
         }
-        const formData = new FormData()
-        formData.append('pet', new Blob([JSON.stringify(pet)], { type: 'application/json' }));
-        formData.append('image_file', imageFile)
-
-        petService.editPet(petId, formData)
-            .then(response => navigate('/user'))
-            .catch(error => alert(`${error.response.status}: ${error.response.data}`))
-
     };
+
+    const deletePet= () => {
+        petService.deletePet(petId)
+            .then(response => navigate('/user'))
+            .catch(error => {
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            petService.deletePet(petId)
+                                .then(response => navigate('/user'))
+                                .catch(error => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                })
+                        })
+                        .catch(error => {
+                            authenticationService.deleteTokens()
+                            navigate('/login')
+                        })
+                }
+            })
+    }
 
     const handleDelete = () => {
         setModalConfirmOpen(true);
@@ -120,13 +178,12 @@ const EditPetForm = () => {
 
     return (
         <div className={formstyles.form_container}>
-            <form action="" className={`${formstyles.form} ${styles.form}`}>
+            <form action="" className={`${formstyles.form} ${styles.form}`} onSubmit={e => handleSubmit(e)}>
                 <label htmlFor="chipId">Чип</label>
                 <input className={`${editstyles.input} ${formstyles.elem_in_window}`}
                     id="chipId"
                     type="text"
                     placeholder="Чип"
-                    required
                     value={chipId}
                     name="chipId"
                     onChange={e => setChipId(e.target.value)}
@@ -136,7 +193,6 @@ const EditPetForm = () => {
                     id="stampId"
                     type="text"
                     placeholder="Клеймо"
-                    required
                     value={stampId}
                     name="stampId"
                     onChange={e => setStampId(e.target.value)}
@@ -191,7 +247,7 @@ const EditPetForm = () => {
                 }
                 {imageUrl == null &&
                     <div className={`${styles.wrapper} ${styles.pet_card} ${formstyles.elem_in_window}`}
-                         style={{background: "url('http://localhost:8080/api/v1/pet/images/" + petImageName + "')"}}>
+                         style={{background: "url(" + Endpoint.IMAGE_ENDPOINT + "/" + petImageName + "')"}}>
                     </div>
                 }
 
@@ -244,8 +300,7 @@ const EditPetForm = () => {
                     </div>
                 </div>
                 <button className={`${formstyles.button} ${formstyles.elem_in_window} ${editstyles.button}`}
-                    type="submit"
-                    onClick={handleSubmit}>
+                    type="submit">
                     Подтвердить изменения
                 </button>
                 <button className={`${formstyles.button} ${formstyles.elem_in_window} ${styles.delete_button}`}
@@ -254,8 +309,8 @@ const EditPetForm = () => {
                     Удалить карточку
                 </button>
             </form>
-
-            <Modal isOpen={modalConfirmIsOpen} onClose={() => setModalConfirmOpen(false)}>
+            <ToastContainer/>
+            <Modal isOpen={modalConfirmIsOpen} onClose={() => setModalConfirmOpen(false)} onDelete={deletePet}>
                     <h2>Вы уверены?</h2>
                     <p>Все данные о питомце будут удалены и в случае его пропажи люди не смогут связаться с Вами через наш сервис.</p>
             </Modal>

@@ -1,32 +1,43 @@
 import axios from "axios";
+import * as Endpoint from './Endpoints'
 
 class AuthenticationService {
-    #BASE_URL = 'http://localhost:8080/api/v1/security'
 
     async login(email, password) {
-        const token = btoa(`${email}:${password}`);
-        console.log(email, password)
-        return await axios.get(`${this.#BASE_URL}/auth`, {
-            headers: {
-                Authorization: `Basic ${token}`
-            }
-        })
+        const loginDto = {
+            email: email,
+            password: password
+        }
+        return await axios.post(`${Endpoint.SECURITY_ENDPOINT}/login`, loginDto)
     }
 
-    async registrate(registrationDto) {
-        return await axios.post(`${this.#BASE_URL}/registration`, registrationDto)
+    isAuthorized() {
+        return localStorage.getItem('access_token') != null;
     }
 
-    saveToken(email, password) {
-        localStorage.setItem('token', btoa(`${email}:${password}`))
+    async refreshToken() {
+        const refreshTokenDto = {
+            refresh_token: localStorage.getItem('refresh_token')
+        }
+        return await axios.post(`${Endpoint.SECURITY_ENDPOINT}/token/refresh`, refreshTokenDto)
     }
 
-    isUserAuthorized() {
-        return localStorage.getItem('token') != null
+    saveToken(accessToken, refreshToken) {
+        localStorage.setItem('access_token', accessToken)
+        localStorage.setItem('refresh_token', refreshToken)
     }
 
-    logout() {
-        localStorage.removeItem('token')
+    deleteTokens() {
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+    }
+
+    logout () {
+        this.deleteTokens()
+    }
+
+    async register(registrationDto) {
+        return await axios.post(`${Endpoint.SECURITY_ENDPOINT}/registration`, registrationDto)
     }
 }
 

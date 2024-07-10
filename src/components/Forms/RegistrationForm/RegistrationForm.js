@@ -1,10 +1,9 @@
 import {useState} from "react";
 import formstyles from "../LoginForm/LoginForm.module.css";
 import styles from "./RegistrationForm.module.css"
-import phoneValidate from "../../../utils/phoneValidate";
-import userService from "../../../services/UserService";
 import authenticationService from "../../../services/AuthenticationService";
 import {useNavigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
 
 
 const RegistrationForm = () => {
@@ -15,11 +14,11 @@ const RegistrationForm = () => {
     const [phone, setPhone] = useState()
     const [permitToShowEmail, setPermitToShowEmail] = useState()
     const [permitToShowPhone, setPermitToShowPhone] = useState()
-    const [password, setPassword] = useState()
+    const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [tg, setTG] = useState("")
-    const [vk, setVK] = useState("")
-    const [ok, setOK] = useState("")
+    const [tg, setTG] = useState('')
+    const [vk, setVK] = useState('')
+    const [ok, setOK] = useState('')
 
     const [toggle, setToggle] = useState(false);
 
@@ -32,20 +31,11 @@ const RegistrationForm = () => {
             confirmPasswordField.value = "";
             confirmPasswordField.setAttribute("placeholder", "Пароль не совпадает")
         } else {
-            const socialNetworks = [
-                {
-                    property_id: 0,
-                    short_name: tg
-                },
-                {
-                    property_id: 1,
-                    short_name: vk
-                },
-                {
-                    property_id: 2,
-                    short_name: ok
-                }
-            ]
+            const socialNetworks = []
+            if (tg != null && tg.trim() !== '') socialNetworks.push({property_id: 0, short_name: tg})
+            if (vk != null && vk.trim() !== '') socialNetworks.push({property_id: 1, short_name: vk})
+            if (ok != null && ok.trim() !== '') socialNetworks.push({property_id: 2, short_name: ok})
+
             const registrationDto = {
                 first_name: name,
                 email: email,
@@ -55,18 +45,21 @@ const RegistrationForm = () => {
                 password: password,
                 social_networks: socialNetworks
             }
-            authenticationService.registrate(registrationDto)
+            authenticationService.register(registrationDto)
                 .then((response) => {
-                    userService.saveToken(email, password)
+                    localStorage.setItem('access_token', response.data.access_token)
+                    localStorage.setItem('refresh_token', response.data.refresh_token)
                     navigate('/user')
                 })
-                .catch(error => alert(error.response))
+                .catch(error => {
+                    toast.error('Пользователь с такой почтой уже существует')
+                })
         }
     }
 
     return (
         <div className={formstyles.form_container}>
-            <form action="" className={formstyles.form}>
+            <form action="" className={formstyles.form} onSubmit={e => handleSubmit(e)}>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Имя"
@@ -157,11 +150,11 @@ const RegistrationForm = () => {
                     )}
                 </div>
                 <button className={formstyles.button + ' ' + formstyles.elem_in_window}
-                        type="submit"
-                        onClick={handleSubmit}>
+                        type="submit">
                     Зарегистрироваться
                 </button>
             </form>
+            <ToastContainer/>
         </div>
     );
 }

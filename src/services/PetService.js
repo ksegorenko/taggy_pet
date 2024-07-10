@@ -1,27 +1,36 @@
 import axios from "axios";
+import * as Endpoint from './Endpoints'
 
 class PetService {
-    #BASE_URL = 'http://localhost:8080/api/v1/pet'
 
     async getPetInfoBySearchParameter(searchParameter) {
-        return await axios.get(`${this.#BASE_URL}/find/${searchParameter}`);
+        return await axios.get(`${Endpoint.PET_ENDPOINT}/find/${searchParameter}`);
+    }
+
+    async deletePet(petId) {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.delete(`${Endpoint.PET_ENDPOINT}/${petId}`,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
     }
 
     async getPetEditInfo(petId) {
-        const token = localStorage.getItem('token')
-        return await axios.get(`${this.#BASE_URL}/${petId}`,{
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.get(`${Endpoint.PET_ENDPOINT}/${petId}`,{
             headers: {
-                Authorization: `Basic ${token}`
+                Authorization: `Bearer ${accessToken}`
             }
         });
     }
 
     async editPet(petId, petEditDto) {
-        const token = localStorage.getItem('token')
-        return await axios.put(`${this.#BASE_URL}/${petId}`, petEditDto,
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.put(`${Endpoint.PET_ENDPOINT}/${petId}`, petEditDto,
             {
                 headers: {
-                    Authorization: `Basic ${token}`
+                    Authorization: `Bearer ${accessToken}`
                 }
             })
     }
