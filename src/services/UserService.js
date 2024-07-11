@@ -21,17 +21,6 @@ class UserService {
         })
     }
 
-    async addPet(formData) {
-        const accessToken = localStorage.getItem('access_token')
-        return await axios.post(`${Endpoint.USER_ENDPOINT}/pets`, formData,
-            {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-    }
-
     async getUserEditInfo() {
         const accessToken = localStorage.getItem('access_token')
         return await axios.get(`${Endpoint.USER_ENDPOINT}/edit`, {

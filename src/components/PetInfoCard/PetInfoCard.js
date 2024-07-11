@@ -23,7 +23,7 @@ const PetInfoCard = ({pet}) => {
                                          backgroundRepeat: "no-repeat",
                                          backgroundPosition: "center",
                                          backgroundSize: "cover",
-                                         backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1)), url(" + Endpoint.IMAGE_ENDPOINT + "/" + pet.pet_image?.image_uuid_name + "')",
+                                         backgroundImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1)), url(' + Endpoint.IMAGE_ENDPOINT + '/' + pet.pet_image?.image_uuid_name + ')',
                                      }}>
                                     <div className={styles.pet_name}>
                                         <h4 id="pets-name">{pet.name}</h4>

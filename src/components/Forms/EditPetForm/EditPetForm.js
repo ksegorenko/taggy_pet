@@ -15,13 +15,13 @@ const EditPetForm = () => {
     const {petId} = useParams()
     const navigate = useNavigate()
     const [pet, setPet] = useState()
-    const [chipId, setChipId] = useState()
-    const [stampId, setStampId] = useState()
-    const [name, setName] = useState()
-    const [type, setType] = useState()
-    const [breed, setBreed] = useState()
-    const [sex, setSex] = useState()
-    const [petImage, setPetImage] = useState()
+    const [chipId, setChipId] = useState('')
+    const [stampId, setStampId] = useState('')
+    const [name, setName] = useState('')
+    const [type, setType] = useState('')
+    const [breed, setBreed] = useState('')
+    const [sex, setSex] = useState('')
+    const [petImage, setPetImage] = useState('')
     const [petImageName, setPetImageName] = useState()
     const [allergy, setAllergy] = useState('')
     const [nutrition, setNutrition] = useState('')
@@ -55,8 +55,9 @@ const EditPetForm = () => {
 
     const setPetData = response => {
         setPet(response.data)
-        setChipId(response.data?.chip_id)
-        setStampId(response.data?.stamp_id)
+
+        setChipId(response.data?.chip_id ? response.data?.chip_id : '' )
+        setStampId(response.data?.stamp_id ? response.data?.stamp_id : '')
         setName(response.data?.name)
         setPetImageName(response.data?.pet_image?.image_uuid_name)
         if (response.data?.pet_image?.image_uuid_name === 'default-pet-image.png') {
@@ -105,6 +106,8 @@ const EditPetForm = () => {
         event.preventDefault();
         if (chipId.trim() === '' && stampId.trim() === '') {
             toast.error('Необходимо указать чип или клеймо питомца');
+        } else if (chipId.trim() !== '' && chipId.trim().length !== 15) {
+            toast.error('Чип должен состоять из 15 символов');
         } else {
             const features = []
             if (allergy != null && allergy.trim() !== '') features.push({property_id: 0, description: allergy})
@@ -113,8 +116,8 @@ const EditPetForm = () => {
             if (other != null && other.trim() !== '') features.push({property_id: 3, description: other})
 
             const pet = {
-                chip_id: chipId,
-                stamp_id: stampId,
+                chip_id: chipId.trim() !== '' ? chipId.trim() : null,
+                stamp_id: stampId.trim() !== '' ? stampId.trim() : null,
                 type: type,
                 breed: breed,
                 sex: sex,
@@ -136,14 +139,26 @@ const EditPetForm = () => {
                                 petService.editPet(petId, formData)
                                     .then(response => navigate('/user'))
                                     .catch(error => {
-                                        authenticationService.deleteTokens()
-                                        navigate('/login')
+                                        if (error.response.status === 401) {
+                                            authenticationService.deleteTokens()
+                                            navigate('/login')
+                                        }
+                                        else {
+                                            toast.error(error?.response?.data?.message)
+                                        }
                                     })
                             })
                             .catch(error => {
-                                authenticationService.deleteTokens()
-                                navigate('/login')
+                                if (error.response.status === 401) {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                }
+                                else {
+                                    toast.error(error?.response?.data?.message)
+                                }
                             })
+                    } else {
+                        toast.error(error?.response?.data?.message)
                     }
                 })
         }
@@ -247,7 +262,7 @@ const EditPetForm = () => {
                 }
                 {imageUrl == null &&
                     <div className={`${styles.wrapper} ${styles.pet_card} ${formstyles.elem_in_window}`}
-                         style={{background: "url(" + Endpoint.IMAGE_ENDPOINT + "/" + petImageName + "')"}}>
+                         style={{background: 'url(' + Endpoint.IMAGE_ENDPOINT + '/' + petImageName + ')'}}>
                     </div>
                 }
 

@@ -1,4 +1,5 @@
 import formstyles from "../LoginForm/LoginForm.module.css";
+import regstyles from "../RegistrationForm/RegistrationForm.module.css"
 import styles from "./PetCreationForm.module.css"
 import {useRef, useState} from "react";
 import userService from "../../../services/UserService";
@@ -24,6 +25,9 @@ const PetCreationForm = () => {
     const [medicine, setMedicine] = useState('')
     const [nutrition, setNutrition] = useState('')
     const [other, setOther] = useState('')
+
+    const [toggle, setToggle] = useState(false);
+
 
     const handleSex = (event) => {
         setSex(event.target.value)
@@ -52,8 +56,8 @@ const PetCreationForm = () => {
             if (medicine != null && medicine.trim() !== '') features.push({property_id: 2, description: medicine})
             if (other != null && other.trim() !== '') features.push({property_id: 3, description: other})
             const pet = {
-                chip_id: chipId,
-                stamp_id: stampId,
+                chip_id: chipId.trim() !== '' ? chipId : null,
+                stamp_id: stampId.trim() !== '' ? stampId : null,
                 type: type,
                 breed: breed,
                 sex: sex,
@@ -64,7 +68,7 @@ const PetCreationForm = () => {
             formData.append('pet', new Blob([JSON.stringify(pet)], { type: 'application/json' }));
             formData.append('image_file', imageFile)
 
-            userService.addPet(formData)
+            petService.addPet(formData)
                 .then(response => navigate('/user'))
                 .catch(error => {
                     if (error.response.status === 401) {
@@ -74,14 +78,24 @@ const PetCreationForm = () => {
                                 petService.addPet(formData)
                                     .then(response => navigate('/user'))
                                     .catch(error => {
-                                        authenticationService.deleteTokens()
-                                        navigate('/login')
+                                        if (error.response.status === 401) {
+                                            authenticationService.deleteTokens()
+                                            navigate('/login')
+                                        } else {
+                                            toast.error(error?.response?.data?.message)
+                                        }
                                     })
                             })
                             .catch(error => {
-                                authenticationService.deleteTokens()
-                                navigate('/login')
+                                if (error.response.status === 401) {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                } else {
+                                    toast.error(error?.response?.data?.message)
+                                }
                             })
+                    } else {
+                        toast.error(error?.response?.data?.message)
                     }
                 })
         }
@@ -137,35 +151,45 @@ const PetCreationForm = () => {
                        name="name"
                        onChange={e => setName(e.target.value)}
                 /><br/><br/>
-                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
-                       type="text"
-                       placeholder="Аллергия"
-                       name="allergy"
-                       onChange={e => setAllergy(e.target.value)}
-                /><br/><br/>
-                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
-                       type="text"
-                       placeholder="Питание"
-                       name="nutrition"
-                       onChange={e => setNutrition(e.target.value)}
-                /><br/><br/>
-                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
-                       type="text"
-                       placeholder="Лекарства"
-                       name="medicine"
-                       onChange={e => setMedicine(e.target.value)}
-                /><br/><br/>
-                <input className={formstyles.input + ' ' + formstyles.elem_in_window}
-                       type="text"
-                       placeholder="Другое"
-                       name="other"
-                       onChange={e => setOther(e.target.value)}
-                /><br/><br/>
-
                 <div className={styles.file_container}>
                     <input type="file" id="real-file" accept="image/png, image/jpeg" style={{display: 'none'}} ref={fileInputRef} onChange={handleFileUpload}/>
                     <button type="button" id="custom-button" onClick={handleClick}>+</button>
                     <span id="custom-text">{imageFile != null ? imageFile.name : 'Фото не выбрано'}</span>
+                </div>
+                <div className={regstyles.checked}>
+                    <label>
+                        <input type="checkbox" name="features_checkbox" id="check" onChange={e => setToggle(e.currentTarget.checked)} className={regstyles.real_checkbox}/>
+                        <span className={regstyles.custom_checkbox}></span>
+                        У питомца есть особенности
+                    </label> <br/><br/>
+                    {toggle && (
+                        <>
+                            <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                                   type="text"
+                                   placeholder="Аллергия"
+                                   name="allergy"
+                                   onChange={e => setAllergy(e.target.value)}
+                            /><br/><br/>
+                            <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                                   type="text"
+                                   placeholder="Питание"
+                                   name="nutrition"
+                                   onChange={e => setNutrition(e.target.value)}
+                            /><br/><br/>
+                            <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                                   type="text"
+                                   placeholder="Лекарства"
+                                   name="medicine"
+                                   onChange={e => setMedicine(e.target.value)}
+                            /><br/><br/>
+                            <input className={formstyles.input + ' ' + formstyles.elem_in_window}
+                                   type="text"
+                                   placeholder="Другое"
+                                   name="other"
+                                   onChange={e => setOther(e.target.value)}
+                            /><br/><br/>
+                        </>
+                    )}
                 </div>
                 <button className={formstyles.button + ' ' + formstyles.elem_in_window}
                         type="submit">

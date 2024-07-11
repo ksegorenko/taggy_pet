@@ -4,6 +4,7 @@ import styles from "./RegistrationForm.module.css"
 import authenticationService from "../../../services/AuthenticationService";
 import {useNavigate} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
+import phoneValidate from "../../../utils/phoneValidate";
 
 
 const RegistrationForm = () => {
@@ -22,12 +23,17 @@ const RegistrationForm = () => {
 
     const [toggle, setToggle] = useState(false);
 
+    const handlePhone = e => {
+        let value = phoneValidate(e);
+        setPhone(value)
+    }
+
     const handleSubmit = e => {
         e.preventDefault();
         if (password !== confirmPassword) {
             let confirmPasswordField = document.getElementById("confirmPassword");
-            confirmPasswordField.style.borderColor="#f81d1d";
-            confirmPasswordField.style.backgroundColor="rgb(253 90 90 / 11%)";
+            confirmPasswordField.style.borderColor = "#f81d1d";
+            confirmPasswordField.style.backgroundColor = "rgb(253 90 90 / 11%)";
             confirmPasswordField.value = "";
             confirmPasswordField.setAttribute("placeholder", "Пароль не совпадает")
         } else {
@@ -52,7 +58,7 @@ const RegistrationForm = () => {
                     navigate('/user')
                 })
                 .catch(error => {
-                    toast.error('Пользователь с такой почтой уже существует')
+                    toast.error(error?.response?.data?.message)
                 })
         }
     }
@@ -79,24 +85,27 @@ const RegistrationForm = () => {
                        placeholder="Телефон"
                        required
                        name="phone"
-                       onChange={e => setPhone(e.target.value)}
+                       onChange={e => handlePhone(e)}
                 /><br/><br/>
                 <h5 className={styles.h5}>Разрешаю показывать контакты</h5>
                 <div className={styles.checkboxes}>
                     <label>
-                        <input type="checkbox" name="emailPermit" checked={permitToShowEmail} onChange={e => setPermitToShowEmail(e.target.checked)} className={styles.real_checkbox}/>
-                            <span className={styles.custom_checkbox}></span>
-                            email
+                        <input type="checkbox" name="emailPermit" checked={permitToShowEmail}
+                               onChange={e => setPermitToShowEmail(e.target.checked)} className={styles.real_checkbox}/>
+                        <span className={styles.custom_checkbox}></span>
+                        email
                     </label>
                     <label>
-                        <input type="checkbox" id="phone" name="phonePermit" checked={permitToShowPhone} onChange={e => setPermitToShowPhone(e.target.checked)} className={styles.real_checkbox}/>
-                            <span className={styles.custom_checkbox}></span>
-                            телефон
+                        <input type="checkbox" id="phone" name="phonePermit" checked={permitToShowPhone}
+                               onChange={e => setPermitToShowPhone(e.target.checked)} className={styles.real_checkbox}/>
+                        <span className={styles.custom_checkbox}></span>
+                        телефон
                     </label>
                 </div>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="password"
                        placeholder="Пароль"
+                       minLength={6}
                        required
                        name="password"
                        onChange={e => setPassword(e.target.value)}
@@ -106,13 +115,16 @@ const RegistrationForm = () => {
                        placeholder="Повторите пароль"
                        required
                        id="confirmPassword"
-                       onChange={e => {setConfirmPassword(e.target.value)}}
+                       onChange={e => {
+                           setConfirmPassword(e.target.value)
+                       }}
                 /><br/><br/>
                 <div className={styles.checked}>
                     <label>
-                        <input type="checkbox" name="features_checkbox" id="check" onChange={e => setToggle(e.currentTarget.checked)} className={styles.real_checkbox}/>
-                            <span className={styles.custom_checkbox}></span>
-                            Указать соцсети
+                        <input type="checkbox" name="features_checkbox" id="check"
+                               onChange={e => setToggle(e.currentTarget.checked)} className={styles.real_checkbox}/>
+                        <span className={styles.custom_checkbox}></span>
+                        Указать соцсети
                     </label>
                     {toggle && (
                         <>

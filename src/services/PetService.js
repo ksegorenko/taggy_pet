@@ -7,6 +7,17 @@ class PetService {
         return await axios.get(`${Endpoint.PET_ENDPOINT}/find/${searchParameter}`);
     }
 
+    async addPet(formData) {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.post(`${Endpoint.PET_ENDPOINT}`, formData,
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+    }
+
     async deletePet(petId) {
         const accessToken = localStorage.getItem('access_token')
         return await axios.delete(`${Endpoint.PET_ENDPOINT}/${petId}`,{

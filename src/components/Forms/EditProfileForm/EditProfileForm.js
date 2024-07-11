@@ -7,6 +7,7 @@ import userService from "../../../services/UserService";
 import {useNavigate} from "react-router-dom";
 import authenticationService from "../../../services/AuthenticationService";
 import petService from "../../../services/PetService";
+import {toast, ToastContainer} from "react-toastify";
 
 
 const EditProfileForm = () => {
@@ -96,14 +97,24 @@ const EditProfileForm = () => {
                                 userService.editUser(editUserDto)
                                     .then(response => navigate('/user'))
                                     .catch(error => {
-                                        authenticationService.deleteTokens()
-                                        navigate('/login')
+                                        if (error.response.status === 401) {
+                                            authenticationService.deleteTokens()
+                                            navigate('/login')
+                                        } else {
+                                            toast.error(error?.response?.data?.message)
+                                        }
                                     })
                             })
                             .catch(error => {
-                                authenticationService.deleteTokens()
-                                navigate('/login')
+                                if (error?.response?.status === 401) {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                } else {
+                                    toast.error(error?.response?.data?.message)
+                                }
                             })
+                    } else {
+                        toast.error(error?.response?.data?.message)
                     }
                 })
         }
@@ -114,11 +125,10 @@ const EditProfileForm = () => {
             <form action="" className={formstyles.form} onSubmit={e => handleSubmit(e)}>
                 <label htmlFor="firstName">Имя</label>
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
-                       id="firstName"
                        type="text"
                        placeholder="Имя"
-                       required
                        value={name}
+                       required
                        name="name"
                        onChange={e => setName(e.target.value)}
                 />
@@ -128,7 +138,6 @@ const EditProfileForm = () => {
                        placeholder="Email"
                        readOnly
                        value={email}
-                       id="email"
                        name="email"
                        onChange={e => setEmail(e.target.value)}
                 />
@@ -138,7 +147,6 @@ const EditProfileForm = () => {
                        placeholder="Телефон"
                        required
                        value={phone}
-                       id="phone"
                        name="phone"
                        onChange={e => setPhone(e.target.value)}
                 />
@@ -159,15 +167,15 @@ const EditProfileForm = () => {
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
                        type="password"
                        placeholder="Пароль"
-                       id="new_password"
+                       minLength={6}
                        name="password"
                        onChange={e => setNewPassword(e.target.value)}
                 />
                 <label htmlFor="confirmPassword">Введите новый пароль еще раз</label>
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
                        type="password"
-                       placeholder="Повторите пароль"
                        id="confirmPassword"
+                       placeholder="Повторите пароль"
                        onChange={e => {setConfirmPassword(e.currentTarget.value)}}
                 />
                 <div className={editstyles.social_networks_container}>
@@ -208,6 +216,7 @@ const EditProfileForm = () => {
                     Подтвердить изменения
                 </button>
             </form>
+            <ToastContainer/>
         </div>
     );
 }
