@@ -21,18 +21,18 @@ const UserData = ({user}) => {
                 <table>
                     <tr>
                         <td className={styles.title}>Имя</td>
-                        <td className={styles.data}>{user.firstName}</td>
+                        <td className={styles.data}>{user.first_name}</td>
                     </tr>
                     <tr>
                         <td className={styles.title}>Телефон</td>
-                        <td className={styles.data}>{user.phoneNumber}</td>
+                        <td className={styles.data}>{user.phone_number}</td>
                     </tr>
                     <tr>
                         <td className={styles.title}>Email</td>
                         <td className={styles.data}>{user.email}</td>
                     </tr>
                     {
-                        user.socialNetworks.map((network) => {
+                        user.social_networks?.map((network) => {
                             return (
                                 <tr>
                                     <td className={styles.title + " " + styles.social_network_logo}>

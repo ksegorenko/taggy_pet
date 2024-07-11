@@ -2,15 +2,10 @@ import {Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import styles from "./HomeNavbar.module.css"
 import "../../../styles/General.css"
-import useAuth from "../../../hooks/AuthHook";
-import {useQueryClient} from "@tanstack/react-query";
+import authenticationService from "../../../services/AuthenticationService";
 
 const HomeNavbar = () => {
 
-    const queryClient = useQueryClient()
-    const user = queryClient.getQueryData('user')
-
-    console.log(user)
     return (
         <Container>
             <Row className={styles.container}>
@@ -19,15 +14,15 @@ const HomeNavbar = () => {
                         <img src="/images/logo-white.svg" alt="Default Taggypet logo" className="logo"/>
                     </Link>
                 </Col>
-                {user ? (
+                {authenticationService.isAuthorized() ? (
                     <>
                         <Col className="text-end mobile_display_none">
-                            <Link to={"/cabinet"} className={styles.personal_cabinet__link}>
+                            <Link to={"/user"} className={styles.personal_cabinet__link}>
                                 Личный кабинет
                             </Link>
                         </Col>
                         <Col className="text-end mobile_only">
-                            <Link to={"/cabinet"}>
+                            <Link to={"/user"}>
                                 <img src="/images/personal-cabinet-icon.svg"
                                      alt="Interractive icon for personal cabinet"
                                      className={styles.personal_cabinet__icon}/>

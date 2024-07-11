@@ -47,7 +47,7 @@ const PetFeatures = ({features}) => {
             </Row>
             <Row className={styles.features_list}>
                 {
-                    features.map((feature) => {
+                    features?.map((feature) => {
                         return <Feature feature={feature}/>
                     })
                 }

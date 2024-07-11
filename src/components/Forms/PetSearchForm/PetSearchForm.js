@@ -1,16 +1,17 @@
 import {useState} from "react";
-import styles from "./PetSearchFrom.module.css";
+import styles from "./PetSearchFrom.module.css"
 import {useNavigate} from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {usePetInfo} from "../../../hooks/PetHooks";
+import petService from "../../../services/PetService";
+import {toast, ToastContainer} from "react-toastify";
 
 const PetSearchForm = () => {
     const [searchParameter, setSearchParameter] = useState('');
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleChanges = e => {
         let value = e.target.value.toUpperCase();
-        setSearchParameter(value);
+        setSearchParameter(value)
     }
 
     const handleKeyPress = e => {
@@ -27,9 +28,19 @@ const PetSearchForm = () => {
         }
     }
 
+
     const findPet = (event) => {
-        event.preventDefault();
-        navigate(`/pet/info`);
+        event.preventDefault()
+
+        petService.getPetInfoBySearchParameter(searchParameter)
+            .then(response => {
+                let pet = response.data
+                console.log(pet)
+                navigate('/pet/info', { state: {pet} })
+            })
+            .catch(error => {
+                toast.info('Такого питомца нет в нашей базе');
+            })
     }
 
     return (
@@ -40,7 +51,7 @@ const PetSearchForm = () => {
                            type="text"
                            value={searchParameter}
                            placeholder="Введите номер чипа или клеймо"
-                           pattern="^[A-Z0-9]{15}$"
+                           pattern="^\d{15}"
                            maxLength="15"
                            required
                            onChange={handleChanges}
@@ -54,7 +65,7 @@ const PetSearchForm = () => {
                     Найти
                 </button>
             </form>
-            <ToastContainer />
+            <ToastContainer/>
         </div>
     );
 }

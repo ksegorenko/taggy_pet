@@ -1,17 +1,43 @@
 import axios from "axios";
+import * as Endpoint from './Endpoints'
 
 class AuthenticationService {
-    #BASE_URL = 'http://localhost:8080/api/v1/user/info'
-    #token = null
 
     async login(email, password) {
-        this.#token = btoa(`${email}:${password}`)
-        console.log(email, password)
-        return await axios.get(this.#BASE_URL, {
-            headers: {
-                Authorization: `Basic ${this.#token}`
-            }
-        })
+        const loginDto = {
+            email: email,
+            password: password
+        }
+        return await axios.post(`${Endpoint.SECURITY_ENDPOINT}/login`, loginDto)
+    }
+
+    isAuthorized() {
+        return localStorage.getItem('access_token') != null;
+    }
+
+    async refreshToken() {
+        const refreshTokenDto = {
+            refresh_token: localStorage.getItem('refresh_token')
+        }
+        return await axios.post(`${Endpoint.SECURITY_ENDPOINT}/token/refresh`, refreshTokenDto)
+    }
+
+    saveToken(accessToken, refreshToken) {
+        localStorage.setItem('access_token', accessToken)
+        localStorage.setItem('refresh_token', refreshToken)
+    }
+
+    deleteTokens() {
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+    }
+
+    logout () {
+        this.deleteTokens()
+    }
+
+    async register(registrationDto) {
+        return await axios.post(`${Endpoint.SECURITY_ENDPOINT}/registration`, registrationDto)
     }
 }
 

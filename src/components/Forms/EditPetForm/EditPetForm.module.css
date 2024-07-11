@@ -89,3 +89,50 @@
     background-color: #ff322bf1;
     color: white;
 }
+
+.wrapper {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    max-width: none;
+    width: 249px;
+    height: 166px;
+    border-radius: 20px;
+}
+
+.pet_card {
+    position: relative;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: cover !important;
+}
+
+.file_container {
+    align-items: center;
+    display: block;
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+.file_container button {
+    outline: none;
+    font-size: 25px;
+    font-weight: 600;
+    padding: 5px 16px;
+    color: white;
+    background-color: #ff742b;
+    border-style: none;
+    border-radius: 17px;
+    cursor: pointer;
+}
+
+.file_container button:hover {
+    background-color: #ff742b;
+    box-shadow: 1px 1px 15px 6px rgb(255, 116, 43);
+}
+
+.file_container span {
+    overflow: hidden;
+    font-weight: 600;
+    margin-left: 10px;
+    color: #848484;
+}
