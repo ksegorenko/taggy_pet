@@ -2,12 +2,13 @@ import formstyles from "../LoginForm/LoginForm.module.css";
 import regstyles from "../RegistrationForm/RegistrationForm.module.css"
 import styles from "./PetCreationForm.module.css"
 import {useRef, useState} from "react";
-import userService from "../../../services/UserService";
-import imageService from "../../../services/ImageService";
 import {useNavigate} from "react-router-dom";
 import authenticationService from "../../../services/AuthenticationService";
 import petService from "../../../services/PetService";
 import {toast, ToastContainer} from "react-toastify";
+import {isChipValid} from "../../../utils/validation";
+import {isStampValid} from "../../../utils/validation";
+import {handleStampKeyPress} from "../../../utils/validation";
 
 const PetCreationForm = () => {
     const navigate = useNavigate()
@@ -28,7 +29,6 @@ const PetCreationForm = () => {
 
     const [toggle, setToggle] = useState(false);
 
-
     const handleSex = (event) => {
         setSex(event.target.value)
     }
@@ -37,6 +37,11 @@ const PetCreationForm = () => {
         const file = event.target.files[0];
         console.log(file.name)
         setSelectedFile(file);
+    }
+
+    const handleStampId = e => {
+        let value = e.target.value.toUpperCase();
+        setStampId(value)
     }
 
     const handleClick = () => {
@@ -48,6 +53,10 @@ const PetCreationForm = () => {
 
         if (chipId.trim() === '' && stampId.trim() === '') {
             toast.error('Необходимо указать чип или клеймо питомца');
+        } else if (chipId.trim() !== '' && !isChipValid(chipId.trim())) {
+            toast.error('Чип должен состоять из 15 цифр');
+        } else if (stampId.trim() !== '' && !isStampValid(stampId.trim())) {
+            toast.error('Некорреткный формат клейма');
         }
         else {
             const features = []
@@ -56,8 +65,8 @@ const PetCreationForm = () => {
             if (medicine != null && medicine.trim() !== '') features.push({property_id: 2, description: medicine})
             if (other != null && other.trim() !== '') features.push({property_id: 3, description: other})
             const pet = {
-                chip_id: chipId.trim() !== '' ? chipId : null,
-                stamp_id: stampId.trim() !== '' ? stampId : null,
+                chip_id: chipId.trim() !== '' ? chipId.trim() : null,
+                stamp_id: stampId.trim() !== '' ? stampId.trim() : null,
                 type: type,
                 breed: breed,
                 sex: sex,
@@ -107,7 +116,6 @@ const PetCreationForm = () => {
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Чип"
-                       pattern="^\d{15}"
                        maxLength="15"
                        name="chipId"
                        onChange={e => setChipId(e.target.value)}
@@ -116,7 +124,9 @@ const PetCreationForm = () => {
                        type="text"
                        placeholder="Клеймо"
                        name="stampId"
-                       onChange={e => setStampId(e.target.value)}
+                       value={stampId}
+                       onChange={e => handleStampId(e)}
+                       onKeyPress={handleStampKeyPress}
                 /><br/><br/>
                 <input className={formstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"

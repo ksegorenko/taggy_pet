@@ -132,7 +132,7 @@ const EditProfileForm = () => {
                        name="name"
                        onChange={e => setName(e.target.value)}
                 />
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">Email <img src="/images/lock.svg" alt="Lock" className={editstyles.lock_icon}/></label>
                 <input className={editstyles.input + ' ' + formstyles.elem_in_window}
                        type="text"
                        placeholder="Email"

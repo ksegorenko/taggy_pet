@@ -17,6 +17,13 @@
     margin-top: 20px;
 }
 
+.lock_icon {
+    margin-bottom: 4px;
+    margin-left: 6px;
+    height: 13px;
+    opacity: 80%;
+}
+
 .social_networks_container .input {
     width: 79%;
 }
