@@ -1,15 +1,16 @@
 import formstyles from "../LoginForm/LoginForm.module.css";
 import editstyles from "../EditProfileForm/EditProfileForm.module.css";
-import petformstyles from "../PetCreationForm/PetCreationForm.module.css"
 import styles from "./EditPetForm.module.css";
 import {useEffect, useRef, useState} from "react";
 import Modal from "../../Modal/Modal";
 import {useNavigate, useParams} from "react-router-dom";
 import petService from "../../../services/PetService";
-import userService from "../../../services/UserService";
 import authenticationService from "../../../services/AuthenticationService";
 import {toast, ToastContainer} from "react-toastify";
 import * as Endpoint from "../../../services/Endpoints";
+import {isChipValid} from "../../../utils/validation";
+import {isStampValid} from "../../../utils/validation";
+import {handleStampKeyPress} from "../../../utils/validation";
 
 const EditPetForm = () => {
     const {petId} = useParams()
@@ -34,7 +35,6 @@ const EditPetForm = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
     const [imageFileText, setImageFileText] = useState()
 
-
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
@@ -47,6 +47,11 @@ const EditPetForm = () => {
         if (file) {
             reader.readAsDataURL(file); // Читаем файл как URL
         }
+    }
+
+    const handleStampId = e => {
+        let value = e.target.value.toUpperCase();
+        setStampId(value)
     }
 
     const handleClick = () => {
@@ -106,8 +111,10 @@ const EditPetForm = () => {
         event.preventDefault();
         if (chipId.trim() === '' && stampId.trim() === '') {
             toast.error('Необходимо указать чип или клеймо питомца');
-        } else if (chipId.trim() !== '' && chipId.trim().length !== 15) {
-            toast.error('Чип должен состоять из 15 символов');
+        } else if (chipId.trim() !== '' && !isChipValid(chipId.trim())) {
+            toast.error('Чип должен состоять из 15 цифр');
+        } else if (stampId.trim() !== '' && !isStampValid(stampId.trim())) {
+            toast.error('Некорреткный формат клейма');
         } else {
             const features = []
             if (allergy != null && allergy.trim() !== '') features.push({property_id: 0, description: allergy})
@@ -200,6 +207,7 @@ const EditPetForm = () => {
                     type="text"
                     placeholder="Чип"
                     value={chipId}
+                    maxLength="15"
                     name="chipId"
                     onChange={e => setChipId(e.target.value)}
                 />
@@ -210,7 +218,8 @@ const EditPetForm = () => {
                     placeholder="Клеймо"
                     value={stampId}
                     name="stampId"
-                    onChange={e => setStampId(e.target.value)}
+                    onChange={handleStampId}
+                    onKeyPress={handleStampKeyPress}
                 />
                 <label htmlFor="type">Вид</label>
                 <input className={`${editstyles.input} ${formstyles.elem_in_window}`}
