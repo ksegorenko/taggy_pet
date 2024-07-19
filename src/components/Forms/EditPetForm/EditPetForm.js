@@ -99,10 +99,21 @@ const EditPetForm = () => {
         setType(response.data?.type)
         setBreed(response.data?.breed)
         setSex(response.data?.sex)
-        setAllergy(response.data?.features[0]?.description)
-        setNutrition(response.data?.features[1]?.description)
-        setMedicine(response.data?.features[2]?.description)
-        setOther(response.data?.features[3]?.description)
+
+        for (let i = 0; i < response.data?.features?.length; ++i) {
+            if (response.data?.features[i]?.property_type?.property_id === 0) {
+                setAllergy(response.data?.features[i]?.description)
+            }
+            if (response.data?.features[i]?.property_type?.property_id === 1) {
+                setNutrition(response.data?.features[i]?.description)
+            }
+            if (response.data?.features[i]?.property_type?.property_id === 2) {
+                setMedicine(response.data?.features[i]?.description)
+            }
+            if (response.data?.features[i]?.property_type?.property_id === 3) {
+                setOther(response.data?.features[i]?.description)
+            }
+        }
     }
 
     useEffect(() => {
