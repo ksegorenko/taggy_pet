@@ -11,6 +11,7 @@ import * as Endpoint from "../../../services/Endpoints";
 import {isChipValid} from "../../../utils/validation";
 import {isStampValid} from "../../../utils/validation";
 import {handleStampKeyPress} from "../../../utils/validation";
+import imageCompression from 'browser-image-compression';
 
 const EditPetForm = () => {
     const {petId} = useParams()
@@ -35,17 +36,41 @@ const EditPetForm = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
     const [imageFileText, setImageFileText] = useState()
 
-    const handleFileUpload = (e) => {
+    const handleFileUpload = async (e) => {
         const file = e.target.files[0];
-        setSelectedFile(file);
-        setImageFileText('Изменить фото')
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageUrl(reader.result); // Сохраняем URL изображения
-        };
         if (file) {
-            reader.readAsDataURL(file); // Читаем файл как URL
+            if (file.size > 2 * 1024 * 1024) {
+                try {
+                    const options = {
+                        maxSizeMB: 2,
+                        maxWidthOrHeight: 1920,
+                        useWebWorker: true
+                    };
+                    const compressedFile = await imageCompression(file, options);
+                    console.log("Original file size:", file.size / 1024 / 1024, "MB");
+                    console.log("Compressed file size:", compressedFile.size / 1024 / 1024, "MB");
+                    setSelectedFile(compressedFile);
+                    setImageFileText('Изменить фото');
+
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setImageUrl(reader.result);
+                    };
+                    reader.readAsDataURL(compressedFile);
+                } catch (error) {
+                    console.error("Error compressing the image:", error);
+                    toast.error('Не удалось загрузить фото, пожалуйста, попробуйте уменьшить его размер и попробуйте снова');
+                }
+            } else {
+                setSelectedFile(file);
+                setImageFileText('Изменить фото');
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setImageUrl(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
         }
     }
 
@@ -74,10 +99,21 @@ const EditPetForm = () => {
         setType(response.data?.type)
         setBreed(response.data?.breed)
         setSex(response.data?.sex)
-        setAllergy(response.data?.features[0]?.description)
-        setNutrition(response.data?.features[1]?.description)
-        setMedicine(response.data?.features[2]?.description)
-        setOther(response.data?.features[3]?.description)
+
+        for (let i = 0; i < response.data?.features?.length; ++i) {
+            if (response.data?.features[i]?.property_type?.property_id === 0) {
+                setAllergy(response.data?.features[i]?.description)
+            }
+            if (response.data?.features[i]?.property_type?.property_id === 1) {
+                setNutrition(response.data?.features[i]?.description)
+            }
+            if (response.data?.features[i]?.property_type?.property_id === 2) {
+                setMedicine(response.data?.features[i]?.description)
+            }
+            if (response.data?.features[i]?.property_type?.property_id === 3) {
+                setOther(response.data?.features[i]?.description)
+            }
+        }
     }
 
     useEffect(() => {
