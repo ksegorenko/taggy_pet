@@ -11,6 +11,7 @@ import RemovePassword from "./pages/RemovePassword/RemovePassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PetTreatment from "./pages/PetTreatment/PetTreatment"
 
+
 function App() {
   return (
       <BrowserRouter>
@@ -26,6 +27,7 @@ function App() {
               <Route path="/reset-password" element={<RemovePassword/>}></Route>
               <Route path="/reset-password/:resetToken" element={<ResetPassword/>}></Route>
               <Route path="/pet/edit/:petId/treatment" element={<PetTreatment/>}></Route>
+
           </Routes>
       </BrowserRouter>
   );
