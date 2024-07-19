@@ -7,6 +7,9 @@ import PetInfo from "./pages/PetInfo/PetInfo";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import PetCreation from "./pages/PetCreation/PetCreation";
 import EditPet from "./pages/EditPet/EditPet";
+import RemovePassword from "./pages/RemovePassword/RemovePassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import PetTreatment from "./pages/PetTreatment/PetTreatment"
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
               <Route path="/user/edit" element={<EditProfile/>}></Route>
               <Route path="/pet/add" element={<PetCreation/>}></Route>
               <Route path="/pet/edit/:petId" element={<EditPet/>}></Route>
+              <Route path="/reset-password" element={<RemovePassword/>}></Route>
+              <Route path="/reset-password/:resetToken" element={<ResetPassword/>}></Route>
+              <Route path="/pet/edit/:petId/treatment" element={<PetTreatment/>}></Route>
           </Routes>
       </BrowserRouter>
   );
