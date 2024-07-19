@@ -1,0 +1,18 @@
+.registration_link {
+    margin-left: 3em;
+    font-size: 16px;
+    color: white;
+    position: relative;
+    text-decoration: none;
+}
+
+.registration_link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 992px) {
+    .registration_link {
+        display: none;
+    }
+}

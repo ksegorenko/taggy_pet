@@ -1,4 +1,4 @@
-import AuthNavbar from "../../components/Navbars/AuthNavbar/AuthNavbar";
+import RegistrationNavbar from "../../components/Navbars/RegistrationNavbar/RegistrationNavbar";
 import setBodyColor from "../../utils/setBodyColor";
 import RegistrationOffer from "../../components/Auth/RegistrationOffer/RegistrationOffer";
 
@@ -7,7 +7,7 @@ const Registration = () => {
     return (
         <div className="purple-background">
             <header className="header">
-                <AuthNavbar/>
+                <RegistrationNavbar/>
             </header>
             <main>
                 <RegistrationOffer/>
