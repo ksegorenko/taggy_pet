@@ -11,6 +11,7 @@ import * as Endpoint from "../../../services/Endpoints";
 import {isChipValid} from "../../../utils/validation";
 import {isStampValid} from "../../../utils/validation";
 import {handleStampKeyPress} from "../../../utils/validation";
+import imageCompression from 'browser-image-compression';
 
 const EditPetForm = () => {
     const {petId} = useParams()
@@ -35,13 +36,52 @@ const EditPetForm = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
     const [imageFileText, setImageFileText] = useState()
 
-    const handleFileUpload = (e) => {
-        const file = e.target.files[0];
-        console.log(file.name);
-        if (file && file.size > 2 * 1024 * 1024) {
-            toast.error('Размер загружаемого файла не должен превышать 2 Мб. Уменьшите, пожалуйста, размер фото');
-        } else {
-            setSelectedFile(file);
+    const handleFileUpload = async (event) => {
+        try {
+            if (!event || !event.target || !event.target.files || event.target.files.length === 0) {
+                throw new Error("No file selected or event is not defined");
+            }
+    
+            const file = event.target.files[0];
+            if (!file) {
+                throw new Error("File is undefined");
+            }
+    
+            if (file.size > 2 * 1024 * 1024) {
+                try {
+                    const options = {
+                        maxSizeMB: 2,
+                        maxWidthOrHeight: 1920,
+                        useWebWorker: true
+                    };
+                    const compressedFile = await imageCompression(file, options);
+                    console.log("Original file size:", file.size / 1024 / 1024, "MB");
+                    console.log("Compressed file size:", compressedFile.size / 1024 / 1024, "MB");
+                    setSelectedFile(compressedFile);
+                    setImageFileText('Изменить фото');
+    
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setImageUrl(reader.result);
+                    };
+                    reader.readAsDataURL(compressedFile);
+                } catch (error) {
+                    console.error("Error compressing the image:", error);
+                    toast.error('Не удалось загрузить фото, пожалуйста, попробуйте уменьшить его размер и попробуйте снова');
+                }
+            } else {
+                setSelectedFile(file);
+                setImageFileText('Изменить фото');
+    
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setImageUrl(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        } catch (error) {
+            console.error("Error handling file upload:", error);
+            toast.error(error.message || 'Произошла ошибка при загрузке файла');
         }
     };
 
@@ -103,21 +143,21 @@ const EditPetForm = () => {
             })
     }, []);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (chipId.trim() === '' && stampId.trim() === '') {
             toast.error('Необходимо указать чип или клеймо питомца');
         } else if (chipId.trim() !== '' && !isChipValid(chipId.trim())) {
             toast.error('Чип должен состоять из 15 цифр');
         } else if (stampId.trim() !== '' && !isStampValid(stampId.trim())) {
-            toast.error('Некорреткный формат клейма');
+            toast.error('Некорректный формат клейма');
         } else {
-            const features = []
-            if (allergy != null && allergy.trim() !== '') features.push({property_id: 0, description: allergy})
-            if (nutrition != null && nutrition.trim() !== '') features.push({property_id: 1, description: nutrition})
-            if (medicine != null && medicine.trim() !== '') features.push({property_id: 2, description: medicine})
-            if (other != null && other.trim() !== '') features.push({property_id: 3, description: other})
-
+            const features = [];
+            if (allergy != null && allergy.trim() !== '') features.push({ property_id: 0, description: allergy });
+            if (nutrition != null && nutrition.trim() !== '') features.push({ property_id: 1, description: nutrition });
+            if (medicine != null && medicine.trim() !== '') features.push({ property_id: 2, description: medicine });
+            if (other != null && other.trim() !== '') features.push({ property_id: 3, description: other });
+    
             const pet = {
                 chip_id: chipId.trim() !== '' ? chipId.trim() : null,
                 stamp_id: stampId.trim() !== '' ? stampId.trim() : null,
@@ -127,45 +167,38 @@ const EditPetForm = () => {
                 name: name,
                 features: features,
                 pet_image: null
-            }
-            const formData = new FormData()
+            };
+    
+            const formData = new FormData();
             formData.append('pet', new Blob([JSON.stringify(pet)], { type: 'application/json' }));
-            formData.append('image_file', imageFile)
-
-            petService.editPet(petId, formData)
-                .then(response => navigate('/user'))
-                .catch(error => {
+            formData.append('image_file', imageFile);
+    
+            try {
+                await petService.editPet(petId, formData);
+                navigate('/user');
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                if (error.response) {
                     if (error.response.status === 401) {
-                        authenticationService.refreshToken()
-                            .then(response => {
-                                authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
-                                petService.editPet(petId, formData)
-                                    .then(response => navigate('/user'))
-                                    .catch(error => {
-                                        if (error.response.status === 401) {
-                                            authenticationService.deleteTokens()
-                                            navigate('/login')
-                                        }
-                                        else {
-                                            toast.error(error?.response?.data?.message)
-                                        }
-                                    })
-                            })
-                            .catch(error => {
-                                if (error.response.status === 401) {
-                                    authenticationService.deleteTokens()
-                                    navigate('/login')
-                                }
-                                else {
-                                    toast.error(error?.response?.data?.message)
-                                }
-                            })
+                        try {
+                            const response = await authenticationService.refreshToken();
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token);
+                            await petService.editPet(petId, formData);
+                            navigate('/user');
+                        } catch (refreshError) {
+                            authenticationService.deleteTokens();
+                            navigate('/login');
+                        }
                     } else {
-                        toast.error(error?.response?.data?.message)
+                        toast.error(error.response.data.message);
                     }
-                })
+                } else {
+                    toast.error('Произошла ошибка при отправке запроса, пожалуйста уменьшите размер загружаемого фото');
+                }
+            }
         }
     };
+    
 
     const deletePet= () => {
         petService.deletePet(petId)
