@@ -1,5 +1,4 @@
 import formstyles from "../LoginForm/LoginForm.module.css";
-import imageCompression from 'browser-image-compression';
 import regstyles from "../RegistrationForm/RegistrationForm.module.css"
 import styles from "./PetCreationForm.module.css"
 import {useRef, useState} from "react";
@@ -33,28 +32,16 @@ const PetCreationForm = () => {
     const handleSex = (event) => {
         setSex(event.target.value)
     }
-
-    const handleFileUpload = async (event) => {
+    
+    const handleFileUpload = (event) => {
         const file = event.target.files[0];
         console.log(file.name);
         if (file && file.size > 2 * 1024 * 1024) {
-            try {
-                const options = {
-                    maxSizeMB: 2,
-                    maxWidthOrHeight: 1920,
-                    useWebWorker: true
-                };
-                const compressedFile = await imageCompression(file, options);
-                console.log("Original file size:", file.size / 1024 / 1024, "MB");
-                console.log("Compressed file size:", compressedFile.size / 1024 / 1024, "MB");
-                setSelectedFile(compressedFile);
-            } catch (error) {
-                console.error("Error compressing the image:", error);
-            }
+            toast.error('Размер загружаемого файла не должен превышать 2 Мб. Уменьшите, пожалуйста, размер фото');
         } else {
             setSelectedFile(file);
         }
-    }
+    };
 
     const handleStampId = e => {
         let value = e.target.value.toUpperCase();

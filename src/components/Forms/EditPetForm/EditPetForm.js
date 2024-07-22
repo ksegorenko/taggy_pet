@@ -11,7 +11,6 @@ import * as Endpoint from "../../../services/Endpoints";
 import {isChipValid} from "../../../utils/validation";
 import {isStampValid} from "../../../utils/validation";
 import {handleStampKeyPress} from "../../../utils/validation";
-import imageCompression from 'browser-image-compression';
 
 const EditPetForm = () => {
     const {petId} = useParams()
@@ -36,43 +35,15 @@ const EditPetForm = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
     const [imageFileText, setImageFileText] = useState()
 
-    const handleFileUpload = async (e) => {
+    const handleFileUpload = (e) => {
         const file = e.target.files[0];
-        if (file) {
-            if (file.size > 2 * 1024 * 1024) {
-                try {
-                    const options = {
-                        maxSizeMB: 2,
-                        maxWidthOrHeight: 1920,
-                        useWebWorker: true
-                    };
-                    const compressedFile = await imageCompression(file, options);
-                    console.log("Original file size:", file.size / 1024 / 1024, "MB");
-                    console.log("Compressed file size:", compressedFile.size / 1024 / 1024, "MB");
-                    setSelectedFile(compressedFile);
-                    setImageFileText('Изменить фото');
-
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        setImageUrl(reader.result);
-                    };
-                    reader.readAsDataURL(compressedFile);
-                } catch (error) {
-                    console.error("Error compressing the image:", error);
-                    toast.error('Не удалось загрузить фото, пожалуйста, попробуйте уменьшить его размер и попробуйте снова');
-                }
-            } else {
-                setSelectedFile(file);
-                setImageFileText('Изменить фото');
-
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setImageUrl(reader.result);
-                };
-                reader.readAsDataURL(file);
-            }
+        console.log(file.name);
+        if (file && file.size > 2 * 1024 * 1024) {
+            toast.error('Размер загружаемого файла не должен превышать 2 Мб. Уменьшите, пожалуйста, размер фото');
+        } else {
+            setSelectedFile(file);
         }
-    }
+    };
 
     const handleStampId = e => {
         let value = e.target.value.toUpperCase();
