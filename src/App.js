@@ -27,7 +27,6 @@ function App() {
               <Route path="/reset-password" element={<RemovePassword/>}></Route>
               <Route path="/reset-password/:resetToken" element={<ResetPassword/>}></Route>
               <Route path="/pet/edit/:petId/treatment" element={<PetTreatment/>}></Route>
-
           </Routes>
       </BrowserRouter>
   );

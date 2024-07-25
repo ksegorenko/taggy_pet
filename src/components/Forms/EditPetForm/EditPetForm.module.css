@@ -136,3 +136,25 @@
     margin-left: 10px;
     color: #848484;
 }
+
+.treatment_button {
+    margin-top: 8px;
+    width: 300px;
+    display: block;
+    font-weight: bold;
+    border-radius: 64px;
+    padding: 10px 35px;
+    font-size: 17px;
+    border-style: none;
+    outline: none;
+    background-color: #FF742B;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+    text-decoration: none;
+}
+
+.treatment_button :hover {
+    background-color: #FF742B;
+    box-shadow: 1px 1px 30px 6px rgba(255, 116, 43, 100);
+}

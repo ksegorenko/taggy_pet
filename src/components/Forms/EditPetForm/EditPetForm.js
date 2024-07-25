@@ -11,6 +11,7 @@ import * as Endpoint from "../../../services/Endpoints";
 import {isChipValid} from "../../../utils/validation";
 import {isStampValid} from "../../../utils/validation";
 import {handleStampKeyPress} from "../../../utils/validation";
+import {Link} from "react-router-dom";
 
 const EditPetForm = () => {
     const {petId} = useParams()
@@ -323,6 +324,9 @@ const EditPetForm = () => {
                         />
                     </div>
                 </div>
+                <Link to={"/pet/edit/:petId/treatment"} className={`${styles.treatment_button} ${formstyles.elem_in_window}`}>
+                    Обработки питомца
+                </Link>
                 <button className={`${formstyles.button} ${formstyles.elem_in_window} ${editstyles.button}`}
                     type="submit">
                     Подтвердить изменения

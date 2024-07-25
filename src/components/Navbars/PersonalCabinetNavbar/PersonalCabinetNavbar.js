@@ -10,8 +10,8 @@ import petService from "../../../services/PetService";
 
 const PersonalCabinetNavbar = () => {
     const [modalConfirmIsOpen, setModalConfirmOpen] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth); // Track window width
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const navigate = useNavigate();
 
     const handleLogout = (e) => {
@@ -49,7 +49,6 @@ const PersonalCabinetNavbar = () => {
             })
     }
 
-    // Handle window resize
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
@@ -68,7 +67,7 @@ const PersonalCabinetNavbar = () => {
                     <h6 className={styles.personal_cabinet_label}>Личный кабинет</h6>
                 </Col>
                 <Col className={"text-end " + styles.menu}>
-                    {windowWidth <= 991.5 ? ( // Show dropdown for small screens
+                    {windowWidth <= 991.5 ? (
                         <div className={styles.dropdown}>
                             <button onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.dropdown_btn}>
                                 ☰
