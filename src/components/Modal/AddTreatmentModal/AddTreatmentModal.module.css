@@ -148,27 +148,6 @@
     outline: none;
 }
 
-.select option[value="От клещей"] {
-    background-image: url('../../../assets/TR_TICK.svg');
-    background-repeat: no-repeat;
-    background-position: left center;
-    padding-left: 20px;
-}
-
-.select option[value="Вакцинация"] {
-    background-image: url('../../../assets/VACCINE.svg');
-    background-repeat: no-repeat;
-    background-position: left center;
-    padding-left: 20px;
-}
-
-.select option[value="От глистов"] {
-    background-image: url('../../../assets/TR_WORMS.svg');
-    background-repeat: no-repeat;
-    background-position: left center;
-    padding-left: 20px;
-}
-
 .icon {
     width: 35px;
     height: 35px;
