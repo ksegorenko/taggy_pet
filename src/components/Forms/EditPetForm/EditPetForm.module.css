@@ -156,5 +156,6 @@
 
 .treatment_button :hover {
     background-color: #FF742B;
+    color: white;
     box-shadow: 1px 1px 30px 6px rgba(255, 116, 43, 100);
 }

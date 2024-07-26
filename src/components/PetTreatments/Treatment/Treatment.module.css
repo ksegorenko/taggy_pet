@@ -1,0 +1,17 @@
+.treatment {
+    margin-top: 0.5em;
+}
+
+.treatment_description {
+    font-weight: 600;
+    max-width: 28em;
+}
+
+.traetment h3 {
+    font-weight: 600;
+    color: #FF742B;
+}
+
+.traetment p {
+    font-weight: 500;
+}
