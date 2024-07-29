@@ -2,6 +2,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import styles from "../HomeNavbar/HomeNavbar.module.css"
 import "../../../styles/General.css"
+import substyles from "./AuthNavbar.module.css"
 
 const AuthNavbar = () => {
     return (
@@ -11,6 +12,11 @@ const AuthNavbar = () => {
                     <Link to={"/"}>
                         <img src="/images/logo-white.svg" alt="Default Taggypet logo" className="logo"/>
                     </Link>
+                </Col>
+                <Col md={{ span: 2, offset: 3 }} lg={{ span: 2, offset: 5 }} xl={{ span: 2, offset: 6 }}>
+                        <Link to={"/registration"} className={styles.registration_link}>
+                            Зарегистрироваться
+                        </Link>
                 </Col>
             </Row>
         </Container>

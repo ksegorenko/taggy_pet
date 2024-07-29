@@ -1,5 +1,4 @@
 import formstyles from "../LoginForm/LoginForm.module.css";
-import imageCompression from 'browser-image-compression';
 import regstyles from "../RegistrationForm/RegistrationForm.module.css"
 import styles from "./PetCreationForm.module.css"
 import {useRef, useState} from "react";
