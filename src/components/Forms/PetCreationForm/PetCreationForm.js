@@ -33,11 +33,40 @@ const PetCreationForm = () => {
         setSex(event.target.value)
     }
 
-    const handleFileUpload = (event) => {
-        const file = event.target.files[0];
-        console.log(file.name)
-        setSelectedFile(file);
-    }
+    const handleFileUpload = async (event) => {
+        try {
+            if (!event || !event.target || !event.target.files || event.target.files.length === 0) {
+                throw new Error("No file selected or event is not defined");
+            }
+    
+            const file = event.target.files[0];
+            if (!file) {
+                throw new Error("File is undefined");
+            }
+    
+            if (file.size > 2 * 1024 * 1024) {
+                try {
+                    const options = {
+                        maxSizeMB: 2,
+                        maxWidthOrHeight: 1920,
+                        useWebWorker: true
+                    };
+                    const compressedFile = await imageCompression(file, options);
+                    console.log("Original file size:", file.size / 1024 / 1024, "MB");
+                    console.log("Compressed file size:", compressedFile.size / 1024 / 1024, "MB");
+                    setSelectedFile(compressedFile);
+                } catch (error) {
+                    console.error("Error compressing the image:", error);
+                    toast.error('Не удалось загрузить фото, пожалуйста, попробуйте уменьшить его размер и попробуйте снова');
+                }
+            } else {
+                setSelectedFile(file);
+            }
+        } catch (error) {
+            console.error("Error handling file upload:", error);
+            toast.error(error.message || 'Произошла ошибка при загрузке файла');
+        }
+    };
 
     const handleStampId = e => {
         let value = e.target.value.toUpperCase();
