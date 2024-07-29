@@ -11,6 +11,7 @@ import * as Endpoint from "../../../services/Endpoints";
 import {isChipValid} from "../../../utils/validation";
 import {isStampValid} from "../../../utils/validation";
 import {handleStampKeyPress} from "../../../utils/validation";
+import imageCompression from 'browser-image-compression';
 
 const EditPetForm = () => {
     const {petId} = useParams()

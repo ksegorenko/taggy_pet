@@ -9,6 +9,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {isChipValid} from "../../../utils/validation";
 import {isStampValid} from "../../../utils/validation";
 import {handleStampKeyPress} from "../../../utils/validation";
+import imageCompression from 'browser-image-compression';
 
 const PetCreationForm = () => {
     const navigate = useNavigate()
