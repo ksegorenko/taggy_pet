@@ -1,6 +1,7 @@
 import {Col, Container, Row} from "react-bootstrap";
-import styles from "./PetTreatment.module.css";
+import styles from "./PetTreatments.module.css";
 import substyles from "components/PetFeatures/PetFeatures.module.css";
+import Treatment from "./Treatment/Treatment";
 
 const pet = {
     treatments: [
@@ -31,7 +32,7 @@ const pet = {
     ]
 }
 
-const PetTreatment = ({treatments}) => {
+const PetTreatments = ({treatments}) => {
     return (
         <Container>
             <Row className={substyles.features_header + " " + substyles.display_none_mobile}>
@@ -39,15 +40,17 @@ const PetTreatment = ({treatments}) => {
                     <h2>Обработки питомца</h2>
                 </Col>
             </Row>
-            <Row className={styles.features_list}>
-                {
-                    treatments?.map((treatment) => {
-                        return <Treatment treatment={treatment}/>
-                    })
-                }
-            </Row>
+            {
+                treatments?.map((treatment, index) => (
+                    <Row key={index} className={styles.features_list}>
+                        <Col>
+                            <Treatment treatment={treatment} />
+                        </Col>
+                    </Row>
+                ))
+            }
         </Container>
     );
 }
 
-export default PetTreatment;
+export default PetTreatments;

@@ -5,6 +5,9 @@ import authenticationService from "../../../services/AuthenticationService";
 import {useNavigate} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 import phoneValidate from "../../../utils/phoneValidate";
+import tgLogo from "assets/images/icons/TG.svg";
+import vkLogo from "assets/images/icons/VK.svg";
+import okLogo from "assets/images/icons/OK.svg";
 
 
 const RegistrationForm = () => {
@@ -129,7 +132,7 @@ const RegistrationForm = () => {
                     {toggle && (
                         <>
                             <div className={styles.social_networks_container}>
-                                <img src={`/images/icons/TG.svg`} alt="Logo" className={styles.social_network_logo}/>
+                                <img src={tgLogo} alt="Logo" className={styles.social_network_logo}/>
                                 <input className={styles.input}
                                        type="text"
                                        placeholder="Логин"
@@ -139,7 +142,7 @@ const RegistrationForm = () => {
                                 />
                             </div>
                             <div className={styles.social_networks_container}>
-                                <img src={`/images/icons/VK.svg`} alt="Logo" className={styles.social_network_logo}/>
+                                <img src={vkLogo} alt="Logo" className={styles.social_network_logo}/>
                                 <input className={styles.input}
                                        type="text"
                                        placeholder="Логин"
@@ -149,7 +152,7 @@ const RegistrationForm = () => {
                                 />
                             </div>
                             <div className={styles.social_networks_container}>
-                                <img src={`/images/icons/OK.svg`} alt="Logo" className={styles.social_network_logo}/>
+                                <img src={okLogo} alt="Logo" className={styles.social_network_logo}/>
                                 <input className={styles.input}
                                        type="text"
                                        placeholder="Логин"

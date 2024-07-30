@@ -1,17 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 .treatment {
     margin-top: 0.5em;
 }
 
 .treatment_description {
-    font-weight: 600;
-    max-width: 28em;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
 }
 
-.traetment h3 {
+.treatment h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
     font-weight: 600;
     color: #FF742B;
 }
 
-.traetment p {
+.treatment p {
     font-weight: 500;
+    font-size: 16px;
+    margin-left: 55px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    width: 35px;
+    height: 35px;
+    margin-right: 20px;
 }
