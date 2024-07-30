@@ -54,6 +54,26 @@ class PetService {
             }
         })
     }
+
+    async addTreatmentToPet(petId, addTreatmentDto) {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.post(`${Endpoint.PET_ENDPOINT}/${petId}/treatments/add`, addTreatmentDto,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+    }
+
+    async editTreatment(petId, treatmentId, editTreatmentDto) {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.put(`${Endpoint.PET_ENDPOINT}/${petId}/treatments/${treatmentId}/edit`, editTreatmentDto,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+    }
 }
 
 export default new PetService();

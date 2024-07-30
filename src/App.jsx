@@ -26,7 +26,7 @@ function App() {
               <Route path="/pet/edit/:petId" element={<EditPet/>}></Route>
               <Route path="/reset-password" element={<RemovePassword/>}></Route>
               <Route path="/reset-password/:resetToken" element={<ResetPassword/>}></Route>
-              <Route path="/pet/edit/:petId/treatment" element={<PetTreatment/>}></Route>
+              <Route path="/pet/:petId/treatment" element={<PetTreatment/>}></Route>
           </Routes>
       </BrowserRouter>
   );

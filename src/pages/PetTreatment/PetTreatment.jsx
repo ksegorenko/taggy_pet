@@ -11,7 +11,7 @@ import authenticationService from "services/AuthenticationService.jsx";
 const PetTreatment = () => {
     const {petId} = useParams()
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [treatments, setTreatments] = useState();
+    const [treatments, setTreatments] = useState([]);
     const navigate = useNavigate();
 
     const handleOpenModal = () => {
@@ -67,9 +67,12 @@ const PetTreatment = () => {
                             </Link>
                         </Col>
                     </Row>
-                    {<TreatmentTable treatments={treatments}/>}
+                    { treatments.length > 0
+                        ? <TreatmentTable petId={petId} treatments={treatments}/>
+                        : <h3 className={styles.h5}>Обработок нет. Добавим?</h3>
+                    }
                 </Container>
-                <AddTreatmentModal isOpen={isModalOpen} onClose={handleCloseModal}/>
+                <AddTreatmentModal petId={petId} isOpen={isModalOpen} onClose={handleCloseModal}/>
             </main>
         </div>
     );

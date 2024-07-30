@@ -89,6 +89,12 @@
     
 }
 
+.h5 {
+    margin-top: 100px;
+    font-weight: bold;
+    opacity: 30%;
+}
+
 @media screen and (max-width: 1199px) {
     .picture_container {
         padding-left: 0;

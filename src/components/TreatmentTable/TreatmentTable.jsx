@@ -1,41 +1,25 @@
 import React, { useState } from 'react';
 import styles from './TreatmentTable.module.css';
-import mite from "../../assets/images/TR_TICK.svg";
-import syringe from '../../assets/images/VACCINE.svg';
-import worms from '../../assets/images/TR_WORMS.svg';
 import {Link} from "react-router-dom";
 import editImg from "assets/images/edit.svg"
 import EditTreatmentModal from "components/Modal/EditTreatmentModal/EditTreatmentModal";
+import vacIcon from "assets/images/VACCINE.svg";
+import tickIcon from "assets/images/TR_TICK.svg";
+import wormsIcon from "assets/images/TR_WORMS.svg";
 
-const TreatmentTable = ({treatments}) => {
-    const unitMap = [
-        { key: 'DAYS', value: 'дн.' },
-        { key: 'WEEKS', value: 'нд.' },
-        { key: 'MONTHS', value: 'мес.' },
-        { key: 'YEARS', value: 'г.' }
-    ];
+const TreatmentTable = ({petId, treatments}) => {
+    const units = {
+        "DAYS": "дн.",
+        "WEEKS": "нд.",
+        "MONTHS": "мес.",
+        "YEARS": "г."
+    };
 
-
-    const data = [
-        { icon: mite, name: 'Барс', date: '20.07.2023', frequency: '1 раз в 3 мес.' },
-        { icon: syringe, name: 'Барс', date: '21.03.2022', frequency: '1 раз в 2 г.' },
-        { icon: worms, name: 'Барс', date: '12.04.2023', frequency: '1 раз в 4 мес.' },
-    ];
-
-    const get = (key) => {
-        let value = null
-        unitMap.map(unit => {
-            if (key === unit.key) {
-                value = unit.value
-            }
-        })
-        return value
-    }
-
-
+    const [treatmentId, setTreatmentId] = useState()
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-    const handleOpenEditModal = () => {
+    const handleOpenEditModal = (id) => {
+        setTreatmentId(id)
         setIsEditModalOpen(true);
     };
 
@@ -63,10 +47,10 @@ const TreatmentTable = ({treatments}) => {
                             <td>{treatment.medication_name}</td>
                             <td>{treatment.date_of_last_treatment}</td>
                             <td>
-                                1 раз в {treatment.treatment_frequency?.num_period} {get(treatment?.treatment_frequency?.period_type)}
+                                1 раз в {treatment.treatment_frequency?.num_period} {units[treatment.treatment_frequency?.period_type]}
                             </td>
                             <td>
-                                <Link to="#" onClick={handleOpenEditModal} className={styles.edit_icon}>
+                                <Link to="#" onClick={() => handleOpenEditModal(treatment.id)} className={styles.edit_icon}>
                                     <img src={editImg} alt="Edit"/>
                                 </Link>
                             </td>
@@ -74,7 +58,7 @@ const TreatmentTable = ({treatments}) => {
                     ))}
                 </tbody>
             </table>
-            <EditTreatmentModal isOpen={isEditModalOpen} onClose={handleCloseEditModal}/>
+            <EditTreatmentModal petId={petId} treatmentId={treatmentId} isOpen={isEditModalOpen} onClose={handleCloseEditModal}/>
         </div>
     );
 };
