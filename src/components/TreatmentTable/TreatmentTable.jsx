@@ -7,12 +7,32 @@ import {Link} from "react-router-dom";
 import editImg from "assets/images/edit.svg"
 import EditTreatmentModal from "components/Modal/EditTreatmentModal/EditTreatmentModal";
 
-const TreatmentTable = () => {
+const TreatmentTable = ({treatments}) => {
+    const unitMap = [
+        { key: 'DAYS', value: 'дн.' },
+        { key: 'WEEKS', value: 'нд.' },
+        { key: 'MONTHS', value: 'мес.' },
+        { key: 'YEARS', value: 'г.' }
+    ];
+
+
     const data = [
         { icon: mite, name: 'Барс', date: '20.07.2023', frequency: '1 раз в 3 мес.' },
         { icon: syringe, name: 'Барс', date: '21.03.2022', frequency: '1 раз в 2 г.' },
         { icon: worms, name: 'Барс', date: '12.04.2023', frequency: '1 раз в 4 мес.' },
     ];
+
+    const get = (key) => {
+        let value = null
+        unitMap.map(unit => {
+            if (key === unit.key) {
+                value = unit.value
+            }
+        })
+        return value
+    }
+
+
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleOpenEditModal = () => {
@@ -35,14 +55,16 @@ const TreatmentTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => (
+                    {treatments?.map((treatment, index) => (
                         <tr key={index}>
                             <td>
-                                <img src={item.icon} alt="icon" className={styles.icon}/>
+                                <img src={"/src/assets/images/" + treatment.property_name + ".svg"} alt="icon" className={styles.icon}/>
                             </td>
-                            <td>{item.name}</td>
-                            <td>{item.date}</td>
-                            <td>{item.frequency}</td>
+                            <td>{treatment.medication_name}</td>
+                            <td>{treatment.date_of_last_treatment}</td>
+                            <td>
+                                1 раз в {treatment.treatment_frequency?.num_period} {get(treatment?.treatment_frequency?.period_type)}
+                            </td>
                             <td>
                                 <Link to="#" onClick={handleOpenEditModal} className={styles.edit_icon}>
                                     <img src={editImg} alt="Edit"/>

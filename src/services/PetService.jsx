@@ -45,6 +45,15 @@ class PetService {
                 }
             })
     }
+
+    async getTreatmentsByPetId(petId) {
+        const accessToken = localStorage.getItem('access_token')
+        return await axios.get(`${Endpoint.PET_ENDPOINT}/${petId}/treatments`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+    }
 }
 
 export default new PetService();

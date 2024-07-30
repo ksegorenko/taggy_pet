@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from "./PetTreatment.module.css";
 import PetTreatmentNavbar from "../../components/Navbars/PetTreatmentNavbar/PetTreatmentNavbar";
-import { useNavigate, Link } from "react-router-dom";
+import {useNavigate, Link, useParams} from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import TreatmentTable from '../../components/TreatmentTable/TreatmentTable';
 import AddTreatmentModal from '../../components/Modal/AddTreatmentModal/AddTreatmentModal.jsx';
+import petService from "services/PetService.jsx";
+import authenticationService from "services/AuthenticationService.jsx";
 
 const PetTreatment = () => {
+    const {petId} = useParams()
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [treatments, setTreatments] = useState();
     const navigate = useNavigate();
 
     const handleOpenModal = () => {
@@ -17,6 +21,34 @@ const PetTreatment = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+
+    useEffect(() => {
+        petService.getTreatmentsByPetId(petId)
+            .then(response => {
+                setTreatments(response.data)
+                console.log(treatments)
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            petService.getTreatmentsByPetId(petId)
+                                .then(response => {
+                                    setTreatments(response.data)
+                                })
+                                .catch(() => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                })
+                        })
+                        .catch(() => {
+                            authenticationService.deleteTokens()
+                            navigate('/login')
+                        })
+                }
+            })
+    }, []);
 
     return (
         <div className={styles.white_background}>
@@ -35,7 +67,7 @@ const PetTreatment = () => {
                             </Link>
                         </Col>
                     </Row>
-                    <TreatmentTable />
+                    {<TreatmentTable treatments={treatments}/>}
                 </Container>
                 <AddTreatmentModal isOpen={isModalOpen} onClose={handleCloseModal}/>
             </main>
