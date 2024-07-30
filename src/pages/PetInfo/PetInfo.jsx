@@ -49,10 +49,10 @@ import PetInfoNavbar from "../../components/Navbars/PetInfoNavbar/PetInfoNavbar"
 import PetInfoCard from "../../components/PetInfoCard/PetInfoCard";
 import PetFeatures from "../../components/PetFeatures/PetFeatures";
 import Contacts from "../../components/Contacts/Contacts";
-import {useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import PetTreatments from "components/PetTreatments/PetTreatments";
 
-const pet = {
+const pet1 = {
     name: "Вобла",
     type: "Собака",
     breed: "Йоркширский терьер",
@@ -135,7 +135,14 @@ const pet = {
 }
 
 const PetInfo = () => {
-    const {searchParameter} = useParams()
+    const location = useLocation();
+    const navigate = useNavigate();
+    if (!location.state || !location.state.pet) {
+        navigate('/');
+        return null;
+    }
+
+    const { pet } = location.state;
 
     return (
         <div className={styles.white_background}>
@@ -143,21 +150,21 @@ const PetInfo = () => {
                 <PetInfoNavbar/>
             </header>
             <div>
-                <PetInfoCard data={pet}/>
+                <PetInfoCard pet={pet}/>
             </div>
-            {
+            { pet?.treatments?.length > 0 &&
                 <div className={styles.features}>
                     <PetTreatments treatments={pet.treatments}/>
                 </div>
             }
-            {
+            { pet?.features?.length > 0 &&
                 <div className={styles.features}>
                     <PetFeatures features={pet.features}/>
                 </div>
             }
             {
                 <div className={styles.contacts}>
-                    <Contacts/>
+                    <Contacts contacts={pet?.users}/>
                 </div>
             }
         </div>

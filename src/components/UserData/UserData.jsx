@@ -1,7 +1,7 @@
 import {Col} from "react-bootstrap";
 import styles from "./UserData.module.css"
 import {Link} from "react-router-dom";
-import editIconImg from "assets/images/edit.svg"
+import editIconImg from "assets/images/edit.svg";
 
 const UserData = ({user}) => {
     return (
@@ -37,7 +37,7 @@ const UserData = ({user}) => {
                             return (
                                 <tr>
                                     <td className={styles.title + " " + styles.social_network_logo}>
-                                        <img src={"/images/icons/" + network.name + ".svg"}  alt="Social network logo" className={styles.social_network_logo}/>
+                                        <img src={"src/assets/images/icons/" + network.name +".svg"}  alt="Social network logo" className={styles.social_network_logo}/>
                                     </td>
                                     <td className={styles.data}>{network.login}</td>
                                 </tr>

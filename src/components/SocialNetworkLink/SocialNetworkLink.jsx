@@ -5,7 +5,7 @@ const SocialNetworkLink = ({socialNetwork}) => {
     return (
         <div className={styles.social_network}>
             <Link to={socialNetwork.base_url + socialNetwork.short_name}>
-                <img src={"../../src/assets/images/icons" + socialNetwork.name + ".svg"} alt="Link"/>
+                <img src={"/src/assets/images/icons/" + socialNetwork.name + ".svg"} alt="Link"/>
             </Link>
         </div>
     );
