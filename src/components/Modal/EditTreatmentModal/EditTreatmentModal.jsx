@@ -23,6 +23,11 @@ const EditTreatmentModal = ({ petId, treatmentId, isOpen, onClose }) => {
         "нд.": "WEEKS",
         "мес.": "MONTHS",
         "г.": "YEARS"
+    };
+    const propertyToText = {
+        "Обработка от клещей": "От клеща",
+        "Обработка от глистов": "От глистов",
+        "Вакцинация": "Вакцинация"
     }
 
     const [medicationId, setMedicationId] = useState("")
@@ -52,7 +57,7 @@ const EditTreatmentModal = ({ petId, treatmentId, isOpen, onClose }) => {
                 setDateOfLastTreatment(response?.data?.date_of_last_treatment);
                 setFrequencyNumber(response?.data?.treatment_frequency?.num_period);
                 setTimeUnit(unitToText[response?.data?.treatment_frequency?.period_type]);
-                setProperty(response?.data?.property?.description);
+                setProperty(propertyToText[response?.data?.property?.description]);
             })
             .catch(error => {
                 if (error.response.status === 401) {

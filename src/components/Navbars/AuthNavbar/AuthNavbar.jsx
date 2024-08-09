@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import styles from "../HomeNavbar/HomeNavbar.module.css";
 import "../../../styles/General.css";
 import substyles from "./AuthNavbar.module.css";
-import logoImg from "assets/images/logo-white.svg";
+import logoImg from "/src/assets/images/logo-white.svg";
 
 const AuthNavbar = () => {
     return (

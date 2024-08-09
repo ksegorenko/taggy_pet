@@ -1,12 +1,14 @@
 import { useState } from "react";
 import styles from "./ResetPasswordForm.module.css";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import resetPasswordService from "services/ResetPasswordService.jsx";
 
 const ResetPasswordForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const {resetToken} = useParams()
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -23,9 +25,20 @@ const ResetPasswordForm = () => {
             confirmPasswordField.setAttribute("placeholder", "Пароль не совпадает");
         } else {
             console.log('Пароль изменен. Осуществляем вход');
-            // Дополнительная логика для входа или дальнейших действий
+            const updatePasswordDto = {
+                token: resetToken,
+                new_password: password
+            }
+            resetPasswordService.updatePassword(updatePasswordDto)
+                .then(response => {
+                    navigate('/login', { state: { message: 'Пароль успешно изменен' } })
+                })
+                .catch(error => {
+                    toast.error(error?.response?.data?.message || 'Не удалось изменить пароль')
+                })
         }
     };
+
 
     return (
         <div className={styles.form_container}>

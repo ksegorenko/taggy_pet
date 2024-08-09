@@ -1,7 +1,7 @@
 import {Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import styles from "../PetInfoNavbar/PetInfoNavbar.module.css";
-import logoImg from "assets/images/logo-black.svg";
+import logoImg from "/src/assets/images/logo-black.svg";
 
 const SimpleBlackNavbar = () => {
     return (

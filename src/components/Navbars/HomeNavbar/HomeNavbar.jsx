@@ -3,8 +3,8 @@ import {Link} from "react-router-dom";
 import styles from "./HomeNavbar.module.css"
 import "../../../styles/General.css"
 import authenticationService from "../../../services/AuthenticationService";
-import logoImg from 'assets/images/logo-white.svg';
-import cabIcon from 'assets/images/personal-cabinet-icon.svg'
+import logoImg from '/src/assets/images/logo-white.svg';
+import cabIcon from '/src/assets/images/personal-cabinet-icon.svg'
 
 
 const HomeNavbar = () => {

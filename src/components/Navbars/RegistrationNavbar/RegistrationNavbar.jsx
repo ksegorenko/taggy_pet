@@ -2,7 +2,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import styles from "../HomeNavbar/HomeNavbar.module.css";
 import "../../../styles/General.css";
-import logoImg from "assets/images/logo-white.svg";
+import logoImg from "/src/assets/images/logo-white.svg";
 
 const RegistrationNavbar = () => {
     return (
