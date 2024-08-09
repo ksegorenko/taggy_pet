@@ -5,6 +5,6 @@ RUN npm install
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 5173
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "run", "start"]
