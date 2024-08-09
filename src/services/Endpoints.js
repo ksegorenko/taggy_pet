@@ -2,4 +2,5 @@ export const SECURITY_ENDPOINT = 'https://sblab-vm06.sblab02.nsu.ru/api/v1/secur
 export const USER_ENDPOINT = 'https://sblab-vm06.sblab02.nsu.ru/api/v1/user'
 export const PET_ENDPOINT = 'https://sblab-vm06.sblab02.nsu.ru/api/v1/pet'
 export const IMAGE_ENDPOINT = 'https://sblab-vm06.sblab02.nsu.ru/api/v1/pet/images'
+export const TREATMENT_ENDPOINT = 'https://sblab-vm06.sblab02.nsu.ru/api/v1/treatment'
 export const RESET_PASSWORD_ENDPOINT = 'https://sblab-vm06.sblab02.nsu.ru/api/v1/reset/password'

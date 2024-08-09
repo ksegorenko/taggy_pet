@@ -52,7 +52,7 @@ label {
     display: inline-block;
     width: 13px;
     height: 13px;
-    background-image: url('../../../../public/images/check.svg');
+    background-image: url("assets/images/check.svg");
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;

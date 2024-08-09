@@ -1,0 +1,209 @@
+import styles from "components/Modal/AddTreatmentModal/AddTreatmentModal.module.css";
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {Link, useNavigate} from "react-router-dom";
+import Dropdown from "components/Dropdowns/Dropdown/Dropdown";
+import saveImg from "assets/images/save.svg";
+import treatmentService from "services/TreatmentService.jsx";
+import authenticationService from "services/AuthenticationService.jsx";
+import petService from "services/PetService.jsx";
+import {toast} from "react-toastify";
+
+const EditTreatmentModal = ({ petId, treatmentId, isOpen, onClose }) => {
+    const navigate = useNavigate()
+    const timeUnits = ["дн.", "нед.", "мес.", "г."];
+
+    const unitToText = {
+        "DAYS": "дн.",
+        "WEEKS": "нд.",
+        "MONTHS": "мес.",
+        "YEARS": "г."
+    };
+    const textToUnit = {
+        "дн.": "DAYS",
+        "нд.": "WEEKS",
+        "мес.": "MONTHS",
+        "г.": "YEARS"
+    };
+    const propertyToText = {
+        "Обработка от клещей": "От клеща",
+        "Обработка от глистов": "От глистов",
+        "Вакцинация": "Вакцинация"
+    }
+
+    const [medicationId, setMedicationId] = useState("")
+    const [dateOfLastTreatment, setDateOfLastTreatment] = useState("")
+    const [medications, setMedications] = useState([])
+
+    const [frequencyNumber, setFrequencyNumber] = useState("");
+    const [timeUnit, setTimeUnit] = useState();
+    const [property, setProperty] = useState("");
+
+    const handleNumberChange = (event) => {
+        const value = event.target.value;
+        if (/^\d*$/.test(value)) {
+            setFrequencyNumber(value);
+        }
+    };
+
+    const handleTimeUnitChange = (event) => {
+        setTimeUnit(event.target.value);
+    };
+
+    useEffect(() => {
+        treatmentService.getTreatmentEditInfo(treatmentId)
+            .then(response => {
+                setMedications(response?.data?.medications);
+                setMedicationId(response?.data?.medication_id);
+                setDateOfLastTreatment(response?.data?.date_of_last_treatment);
+                setFrequencyNumber(response?.data?.treatment_frequency?.num_period);
+                setTimeUnit(unitToText[response?.data?.treatment_frequency?.period_type]);
+                setProperty(propertyToText[response?.data?.property?.description]);
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            treatmentService.getTreatmentEditInfo(treatmentId)
+                                .then(response => {
+                                    setMedications(response?.data?.medications);
+                                    setMedicationId(response?.data?.medication_id);
+                                    setDateOfLastTreatment(response?.data?.date_of_last_treatment);
+                                    setFrequencyNumber(response?.data?.treatment_frequency?.num_period);
+                                    setTimeUnit(unitToText[response?.data?.treatment_frequency?.period_type]);
+                                    setProperty(response?.data?.property?.description);
+                                })
+                                .catch(error => {
+                                    authenticationService.deleteTokens()
+                                    navigate('/login')
+                                })
+                        })
+                        .catch(error => {
+                            authenticationService.deleteTokens()
+                            navigate('/login')
+                        })
+                }
+            })
+    }, [isOpen]);
+
+    const handleMedicationChange = (event) => {
+        const id = event.target.value
+        setMedicationId(event.target.value);
+        let medication = medications.find(m => m.id.toString() === id)
+        setFrequencyNumber(medication?.default_treatment_frequency?.num_period)
+        setTimeUnit(unitToText[medication?.default_treatment_frequency?.period_type])
+    };
+
+    const handleClick = (e) => {
+        e.preventDefault()
+        const editTreatmentDto = {
+            medication_id: medicationId,
+            date_of_last_treatment: dateOfLastTreatment,
+            treatment_frequency: {
+                num_period: frequencyNumber,
+                period_type: textToUnit[timeUnit]
+            }
+        }
+        petService.editTreatment(petId, treatmentId, editTreatmentDto)
+            .then(() => {
+                window.location.reload()
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    authenticationService.refreshToken()
+                        .then(response => {
+                            authenticationService.saveToken(response.data.access_token, response.data.refresh_token)
+                            petService.editTreatment(petId, treatmentId, editTreatmentDto)
+                                .then(() => window.location.reload())
+                                .catch(error => {
+                                    if (error.response.status === 401) {
+                                        authenticationService.deleteTokens()
+                                        navigate('/login')
+                                    } else {
+                                        toast.error(error?.response?.data?.message)
+                                    }
+                                })
+                        })
+                        .catch(error => {
+                            if (error.response.status === 401) {
+                                authenticationService.deleteTokens()
+                                navigate('/login')
+                            } else {
+                                toast.error(error?.response?.data?.message)
+                            }
+                        })
+                } else {
+                    toast.error(error?.response?.data?.message)
+                }
+            })
+
+    }
+    
+    return (
+        <>
+            {isOpen && (
+                <div className={styles.modal}>
+                    <div className={styles.modal_wrapper}>
+                        <div className={styles.modal_content}>
+                            <div className={styles.modal_header}>
+                                <h2 className={styles.modal_title}>Редактирование обработки</h2>
+                                <div className={styles.close} id="pop-up-close" onClick={() => onClose()}>✕</div>
+                            </div>
+                            <div className={styles['table-container']}>
+                                <table className={styles['resizable-table']}>
+                                    <thead>
+                                        <tr>
+                                            <th>Тип обработки</th>
+                                            <th>Препарат</th>
+                                            <th>Дата последней обработки</th>
+                                            <th>Частота обработок</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <Dropdown selected={property} setSelected={setProperty} setMedications={setMedications}/>
+                                            </td>
+                                            <td>
+                                                <select className={styles.select} value={medicationId} onChange={handleMedicationChange}>
+                                                    {medications.map(medication => (
+                                                        <option value={medication?.id}>{medication?.name}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="date" className={styles.input} value={dateOfLastTreatment} onChange={e => setDateOfLastTreatment(e.target.value)}/>
+                                            </td>
+                                            <td className={styles.frequencyInputContainer}>
+                                                <span className={styles.frequencyText}>1 раз в</span>
+                                                <input
+                                                    type="text"
+                                                    className={styles.numberInput}
+                                                    value={frequencyNumber}
+                                                    onChange={handleNumberChange}
+                                                />
+                                                <select className={styles.selectSmall} value={timeUnit} onChange={handleTimeUnitChange}>
+                                                    {timeUnits.map((unit, index) => (
+                                                        <option key={index} value={unit}>{unit}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <button className={styles.save_icon} onClick={handleClick}>
+                                                    <img src={saveImg} alt="Save" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    )
+}
+
+export default EditTreatmentModal;

@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 .personal_cabinet_label {
     font-weight: 500;
     font-size: 20px;
     opacity: 40%;
     margin-top: 15px;
     margin-left: 8px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .menu {
@@ -28,6 +31,7 @@
     border-color: #462446;
     cursor: pointer;
     transition: 0.2s;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .logout_btn:hover {
@@ -38,7 +42,6 @@
 .burger, .burger_icon {
     display: none;
 }
-
 
 .delete_col {
     margin-left: 60px;
