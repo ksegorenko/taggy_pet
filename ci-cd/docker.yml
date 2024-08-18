@@ -1,0 +1,31 @@
+docker_hub_prod:
+  stage: docker
+  image: docker:26.1
+  services:
+    - docker:26.1-dind
+  variables:
+    SECURE_FILES_DOWNLOAD_PATH: '.'
+  only:
+    - /^release-.*$/
+  needs:
+    - build
+  script:
+    - docker build -t $DOCKER_HUB_USERNAME/release:frontend-$CI_COMMIT_REF_NAME -t $DOCKER_HUB_USERNAME/release:frontend-$DOCKER_IMAGE_TAG -f ./deploy/prod/Dockerfile .
+    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+    - docker push $DOCKER_HUB_USERNAME/release:frontend-$CI_COMMIT_REF_NAME
+    - docker push $DOCKER_HUB_USERNAME/release:frontend-$DOCKER_IMAGE_TAG
+
+docker_hub_dev:
+  stage: docker
+  image: docker:26.1
+  services:
+    - docker:26.1-dind
+  needs:
+    - build
+  only:
+    - CI-CD
+    - develop
+  script:
+    - docker build -t $DOCKER_HUB_USERNAME/develop:frontend-$DOCKER_IMAGE_TAG -f ./deploy/dev/Dockerfile .
+    - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+    - docker push $DOCKER_HUB_USERNAME/develop:frontend-$DOCKER_IMAGE_TAG

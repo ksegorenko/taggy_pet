@@ -1,0 +1,6 @@
+build:
+  stage: build
+  image: node:alpine
+  script:
+    - npm install
+    - CI=false npm run build

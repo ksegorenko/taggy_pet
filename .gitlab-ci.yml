@@ -1,0 +1,4 @@
+include:
+  - 'ci-cd/stages.yml'
+  - 'ci-cd/build.yml'
+  - 'ci-cd/docker.yml'
