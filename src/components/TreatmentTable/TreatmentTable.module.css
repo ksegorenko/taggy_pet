@@ -91,6 +91,17 @@
     height: 60px;
 }
 
+@media screen and (max-width: 873px) {
+    .table-container {
+        margin-top: 0px;
+    }
+
+    .resizable-table th:nth-child(5), 
+    .resizable-table td:nth-child(5) {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .resizable-table th {
         font-size: 12px;
