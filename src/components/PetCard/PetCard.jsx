@@ -11,7 +11,7 @@ const PetCard = ({pet}) => {
             <Link to={'/pet/edit/' + pet?.pet_id} >
                 <div className={styles.wrapper + " " + styles.pet_card}
                     style={{background: pet.pet_image.image_uuid_name === "default-pet-image.png"
-                            ? 'url(' + Endpoint.IMAGE_ENDPOINT + '/' + pet.pet_image.image_uuid_name + ')'
+                            ? 'url(' + Endpoint.IMAGE_ENDPOINT + '/' + pet.pet_image?.image_uuid_name + ')'
                             : 'linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1)), url(' + Endpoint.IMAGE_ENDPOINT + '/'+ pet.pet_image.image_uuid_name + ')'}}>
                     <div className={styles.pet_name}>
                         <h5>{pet.name}</h5>

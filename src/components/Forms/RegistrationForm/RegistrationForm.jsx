@@ -61,7 +61,7 @@ const RegistrationForm = () => {
                     navigate('/user')
                 })
                 .catch(error => {
-                    toast.error(error?.response?.data?.message)
+                    toast.error("Пользователь с такой почтой уже зарегистрирован в нашей системе");
                 })
         }
     }
