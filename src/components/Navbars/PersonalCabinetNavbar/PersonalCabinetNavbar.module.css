@@ -10,12 +10,25 @@
 }
 
 .menu {
-    display: none;
+    display: block;
+    z-index: 1;
 }
 
 .menu label {
     font-weight: 600;
     font-size: 25px;
+}
+
+.menu li {
+    display: block;
+    margin-right: 0px;
+    padding: 0px;
+}
+
+.menu a {
+    font-weight: 600;
+    font-size: 18px;
+    color: #462446;
 }
 
 .logout_btn {
@@ -32,6 +45,9 @@
     cursor: pointer;
     transition: 0.2s;
     font-family: 'Montserrat', sans-serif;
+    margin-bottom: 8px;
+    display: inline-block;
+    padding: 3px 15px;
 }
 
 .logout_btn:hover {
@@ -40,7 +56,37 @@
 }
 
 .burger, .burger_icon {
+    display: block;
+}
+
+.burger_icon::before {
+    content: '☰';
+    font-size: 27px;
+}
+
+nav {
+    z-index: 1;
     display: none;
+    right: 0;
+    position: absolute;
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 10px 15px;
+}
+
+.display_none_md {
+    display: none;
+}
+
+.burger:checked + label + nav {
+    display: block;
+}
+
+.burger:checked + .burger_icon::before {
+    content: '⮾';
+    color: #ff742b;
 }
 
 .delete_col {
@@ -69,8 +115,6 @@
     opacity: 100%;
     color: #462446;
 }
-
-
 
 .pop_up {
     display: none;
@@ -162,6 +206,7 @@
 
 .dropdown {
     position: relative;
+    z-index: 10;
     display: inline-block;
 }
 
@@ -178,7 +223,6 @@
     position: absolute;
     background-color: white;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
     right: 0;
     width: 200px;
     text-align: left;
@@ -222,60 +266,6 @@
     }
 }
 
-@media screen and (max-width: 991.5px) {
-    .menu, .burger_icon {
-        display: block;
-    }
-
-    .burger_icon::before {
-        content: '☰';
-        font-size: 27px;
-    }
-
-    nav {
-        z-index: 1;
-        display: none;
-        right: 0;
-        position: absolute;
-        width: 200px;
-        background-color: white;
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
-        border-radius: 20px;
-        padding: 10px 15px;
-    }
-
-    .display_none_md {
-        display: none;
-    }
-
-    .burger:checked + label + nav {
-        display: block;
-    }
-
-    .burger:checked + .burger_icon::before {
-        content: '⮾';
-        color: #ff742b;
-    }
-
-    .menu li {
-        display: block;
-        margin-right: 0px;
-        padding: 0px;
-    }
-
-    .menu a {
-        font-weight: 600;
-        font-size: 18px;
-        color: #462446;
-    }
-
-    .logout_btn {
-        margin-bottom: 8px;
-        display: inline-block;
-        padding: 3px 15px;
-    }
-}
-
 @media screen and (max-width: 767.5px) {
     .personal_cabinet_col {
         padding-left: 0;
@@ -293,6 +283,4 @@
     .personal_cabinet_col {
         display: none;
     }
-
-    
 }

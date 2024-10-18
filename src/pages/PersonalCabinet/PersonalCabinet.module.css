@@ -19,6 +19,8 @@
 .nav {
     margin-top: 25px;
     margin-bottom: 10px;
+    position: relative;
+    z-index: 5;
 }
 
 .pets_list_header {
@@ -38,6 +40,8 @@
 
 .pers_cab_img {
     height: 350px;
+    position: relative;
+    z-index: 1;
 }
 
 
