@@ -23,26 +23,6 @@
     margin-bottom: 10px;
 }
 
-.pets_list_header {
-    margin-top: 35px;
-    margin-bottom: 30px;
-}
-
-.pets_list_header ul {
-    margin: 0;
-    padding: 4px;
-}
-
-.picture_container {
-    z-index: 1;
-    padding-left: 30px;
-}
-
-.pers_cab_img {
-    height: 350px;
-}
-
-
 .add_label {
     font-size: 20px;
     margin-left: 8px;
@@ -95,30 +75,8 @@
     opacity: 30%;
 }
 
-@media screen and (max-width: 1199px) {
-    .picture_container {
-        padding-left: 0;
-        margin-left: 100px
-    }
-}
-
-@media screen and (max-width: 991.5px) {
-    .picture_container {
+@media screen and (max-width: 873px) {
+    .add_btn {
         display: none;
     }
 }
-
-@media screen and (max-width: 575.5px) {
-    .display_none_mobile {
-        display: none;
-    }
-
-    .list_label {
-        font-size: 23px;
-    }
-
-    .mobile {
-        display: contents;
-    }
-}
-

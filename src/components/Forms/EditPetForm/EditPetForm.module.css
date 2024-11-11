@@ -75,7 +75,6 @@
     background-color: white;
     color: #ff322bf1;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
     outline: none;
     margin-top: 20px;
 }
@@ -83,6 +82,8 @@
 .delete_button:hover {
     background-color: #ff322bf1;
     color: white;
+    border: 2px solid #ff322bf1;
+    box-shadow: 1px 1px 30px 6px rgba(255, 0, 0, 100);
 }
 
 .delete_button:active {
@@ -138,8 +139,6 @@
 }
 
 .treatment_button {
-    margin-top: 8px;
-    width: 300px;
     display: block;
     font-weight: bold;
     border-radius: 64px;
@@ -152,10 +151,17 @@
     cursor: pointer;
     transition: 0.2s;
     text-decoration: none;
+    margin-top: 15px;
+    width: 300px;
 }
 
-.treatment_button :hover {
+.treatment_button:hover {
     background-color: #FF742B;
     color: white;
     box-shadow: 1px 1px 30px 6px rgba(255, 116, 43, 100);
+}
+
+.delete_button:active {
+    background-color: #FF742B;
+    color: white;
 }
