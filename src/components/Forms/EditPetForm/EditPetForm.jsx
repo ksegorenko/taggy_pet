@@ -364,7 +364,7 @@ const EditPetForm = () => {
                         />
                     </div>
                 </div>
-                <Link to={"/pet/" + petId + "/treatment"} className={`${styles.treatment_button} ${formstyles.elem_in_window}`}>
+                <Link to={"/pet/" + petId + "/treatment"} className={`${formstyles.button} ${formstyles.elem_in_window} ${styles.treatment_button}`}>
                     Обработки питомца
                 </Link>
                 <button className={`${formstyles.button} ${formstyles.elem_in_window} ${editstyles.button}`}

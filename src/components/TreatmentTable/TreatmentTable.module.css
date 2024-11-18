@@ -58,6 +58,7 @@
 
 .resizable-table th:nth-child(2) {
     width: 25%;
+    margin-left: 10px;
 }
 .resizable-table td:nth-child(2) {
     width: 25%;
@@ -88,4 +89,63 @@
 
 .edit_icon img {
     height: 60px;
+}
+
+@media screen and (max-width: 873px) {
+    .table-container {
+        margin-top: 0px;
+    }
+
+    .resizable-table th:nth-child(5), 
+    .resizable-table td:nth-child(5) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .resizable-table th {
+        font-size: 12px;
+    }
+
+    .resizable-table td {
+        font-size: 14px;
+    }
+
+    .edit_icon img {
+        height: 45px;
+    }
+
+    .icon {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+@media screen and (max-width: 521px) {
+    .edit_icon img {
+        height: 35px;
+    }
+
+    .resizable-table th {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .resizable-table th {
+        font-size: 8px;
+    }
+
+    .resizable-table td {
+        font-size: 10px;
+    }
+
+    .edit_icon img {
+        height: 30px;
+    }
+
+    .icon {
+        width: 15px;
+        height: 15px;
+    }
 }

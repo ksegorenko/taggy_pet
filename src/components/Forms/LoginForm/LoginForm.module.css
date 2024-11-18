@@ -45,6 +45,10 @@
     box-shadow: 1px 1px 30px 6px rgba(255, 116, 43, 100);
 }
 
+.button:active {
+    border: #FF742B;
+}
+
 @media screen and (min-width: 992px){
     .input {
         width: 280px;
